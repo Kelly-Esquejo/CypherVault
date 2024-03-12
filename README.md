@@ -9,7 +9,8 @@ Password Manager
 ## About <a name = "about"></a>
 Write about 1-2 paragraphs describing the purpose of your project.
 
-```Features:
+```
+Features
 ```
 - Secure Storage: Encrypts and stores passwords securely using AES-256 encryption.
 - Easy Retrieval: Retrieve your passwords quickly with a user-friendly interface.
