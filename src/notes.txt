@@ -1,0 +1,36 @@
+
+
+Progress:
+
+Implementing basic features:
+    Store passwords securely.
+    Add new passwords.
+    Retrieve existing passwords.
+    Delete passwords.
+
+
+
+Write a function to save a password.
+Write a function to read all passwords. 
+
+C++ concepts
+    File I/O for storing and retrieving passwords.
+    Data encryption and decryption for security.
+    Classes and objects for managing passwords.
+    User input and output for interaction.
+
+
+add encryption
+
+OpenSSL
+
+
+/*NOTE:
+
+
+features:
+alphabetize by services
+adding two-factor authentication
+
+
+*/

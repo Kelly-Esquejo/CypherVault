@@ -1,41 +1,51 @@
-#include <iostream>
-#include <string>
-
+#include "Credential.h"
 using namespace std;
 
-class Credential{
-    private:
-    
-        string service;
-        string username;
-        string password;
+// Constructor definition
+Credential::Credential(){
+    service = "";
+    username = "";
+    password = "";
+}
 
-    public:
-        Credential(/* args */);
-        ~Credential();
+Credential::Credential(string x, string y, string z) {
+    service = x;
+    username = y;
+    password = z;
+}
 
-        // Getter functions
-        string getService() const {
-            return service;
-        }
+// Destructor definition
+Credential::~Credential() {}
 
-        string getUsername() const {
-            return username; 
-        }
-            
-        string getPassword() const {
-            return password;
-        }
+// Getter function definitions
+string Credential::getService() const {
+    return service;
+}
 
-        // Setter functions
-        void setService(const string& newService){
-           service = newService; 
-        }
-        void setUsername(const string& newUsername){ 
-            username = newUsername; 
-        }
-        void setPassword(const string& newPassword){ 
-            password = newPassword; 
-        }
+string Credential::getUsername() const {
+    return username;
+}
 
-};
+string Credential::getPassword() const {
+    return password;
+}
+
+// Setter function definitions
+
+void Credential::setCredential(string x, string y, string z){
+    service = x;
+    username = y;
+    password = z;
+}
+
+void Credential::setService(const string& newService) {
+    service = newService;
+}
+
+void Credential::setUsername(const string& newUsername) {
+    username = newUsername;
+}
+
+void Credential::setPassword(const string& newPassword) {
+    password = newPassword;
+}

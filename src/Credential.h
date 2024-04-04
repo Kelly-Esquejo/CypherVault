@@ -15,6 +15,7 @@ class Credential{
 
     public:
         Credential();
+        Credential(string, string, string);
         ~Credential();
 
          // Getter functions
@@ -23,9 +24,10 @@ class Credential{
         string getPassword() const;
 
         // Setter functions
-        void setService(const string& newService) { service = newService; }
-        void setUsername(const string& newUsername) { username = newUsername; }
-        void setPassword(const string& newPassword) { password = newPassword; }
+        void setCredential(string, string, string);
+        void setService(const string& newService);
+        void setUsername(const string& newUsername);
+        void setPassword(const string& newPassword);
 
 };
 
