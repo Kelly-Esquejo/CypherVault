@@ -1,7 +1,7 @@
 #include <iomanip>
 #include "Credential.h"
 #include "Prompts.h"
-
+using namespace std;
 int main(int argc, char const *argv[]) {
   Prompts prompt;
 
@@ -9,7 +9,12 @@ int main(int argc, char const *argv[]) {
 
 
   bool exit = false;
-
+  cout << endl << endl << endl << endl << endl;
+ cout << R"(  ___|                |                \ \     /              |  |  )" << endl;
+cout << R"( |      |   |  __ \   __ \    _ \   __| \ \   /  _` |  |   |  |  __|)" << endl;
+cout << R"( |      |   |  |   |  | | |   __/  |     \ \ /  (   |  |   |  |  |  )" << endl;
+cout << R"(\____| \__, |  .__/  _| |_| \___| _|      \_/  \__,_| \__,_| _| \__|)" << endl;
+cout << R"(       ____/  _|                                                    )" << endl;
   while(!exit){
     prompt.printMenu();
     int choice = prompt.menu();
