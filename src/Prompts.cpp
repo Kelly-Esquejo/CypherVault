@@ -20,13 +20,14 @@ void Prompts::newAccount (string &service, string &username, string &password){
   tcgetattr(STDIN_FILENO, &oldt);
   termios newt = oldt;
   newt.c_lflag &= ~ECHO;
-  // hides user input
-  tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+  tcsetattr(STDIN_FILENO, TCSANOW, &newt); // Hides
 
-  // get user input for password
-  getline(cin, password);
-  // see if user wants to see password
-  
+  std::string s;
+  cin >> password;
+
+  std::cout << "\rYour password is: " << password << '\n';
+  tcsetattr(STDIN_FILENO, TCSANOW, &oldt); // return to display
+
   cout << "Show password? Type yes or no: ";
   string seePassword;
   bool validInput = true;
@@ -42,7 +43,7 @@ void Prompts::newAccount (string &service, string &username, string &password){
       cout << "Invalid input: Type yes or no" << endl;
     }
   }
-  // newcredential.setCredential(service, username, password);
+  newcredential.setCredential(service, username, password);
 }
 /*
 
@@ -52,6 +53,10 @@ void Prompts::changePassword(string &password){
   cout << "|          Changing Password            |" << endl;
   cout << "-----------------------------------------" << endl;
 
+
+  cout << "Changing password for " << endl;
+  // TODO: get service 
+  
   termios oldt;
   tcgetattr(STDIN_FILENO, &oldt);
   termios newt = oldt;
@@ -60,7 +65,7 @@ void Prompts::changePassword(string &password){
   tcsetattr(STDIN_FILENO, TCSANOW, &newt);
 
   // get user input for password
-  getline(cin, password);
+  cin >> password;
 
   // see if user wants to see password
   string seePassword;
@@ -78,9 +83,6 @@ void Prompts::changePassword(string &password){
       cout << "Invalid input: Type yes or no" << endl;
     }
   }
- 
-
-
 }
 
 void Prompts::changeUsername(string &username){
@@ -117,7 +119,7 @@ void Prompts::printMenu(){
   cout << "-----------------------------------------" << endl;
   cout << "| 1. New Accounts                       |" << endl;
   cout << "| 4. Delete Account                     |" << endl;
-  cout << "| 3. Change Account                    |" << endl;
+  cout << "| 3. Change Account                     |" << endl;
   cout << "| 4. Change Password                    |" << endl;
   cout << "| 5. Exit                               |" << endl;
   cout << "|                                       |" << endl;
