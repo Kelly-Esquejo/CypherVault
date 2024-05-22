@@ -22,15 +22,20 @@ C++ concepts
 
 add encryption
 
-OpenSSL
+OpenSSL:
+    The functionality includes symmetric encryption, public key cryptography, 
+    key agreement, certificate handling, cryptographic hash functions, 
+    cryptographic pseudo-random number generators, message authentication codes (MACs), 
+    key derivation functions (KDFs), and various utilities.
 
+features to add:
+    alphabetize by services
+    adding two-factor authentication
 
-/*NOTE:
-
-
-features:
-alphabetize by services
-adding two-factor authentication
-
-
-*/
+5/20/24:
+    Using SQLite, specifically sqlite3 API 
+        - serverless database (does not require a separate server -> simple deploy and manage)
+        - lightweight (disk space and memory usage)
+    Embedded database for local/client storage  
+    Follows ACID properties (atomicity, consistency, isolation, & durability)
+    Almost all OS supports it
