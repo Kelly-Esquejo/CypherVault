@@ -1,10 +1,17 @@
 
 #include "Prompts.h"
-#include <termios.h> 
 #include <unistd.h>
+#include <conio.h> 
 
 //**********************************************************************
-
+// Enumerator 
+enum IN { 
+    // 13 is ASCII for carriage 
+    // return 
+    IN_BACK = 8, 
+    IN_RET = 13 
+  
+}; 
 
 void Prompts::newAccount (string &service, string &username, string &password){
   cout  << endl << endl << "----------------------------------------" << endl;
@@ -16,17 +23,10 @@ void Prompts::newAccount (string &service, string &username, string &password){
   cin >> username;
   cout << "Enter password for " << username << " on " << service << ": ";
 
-  termios oldt;
-  tcgetattr(STDIN_FILENO, &oldt);
-  termios newt = oldt;
-  newt.c_lflag &= ~ECHO;
-  tcsetattr(STDIN_FILENO, TCSANOW, &newt); // Hides
+  password = getPassword();
 
-  std::string s;
-  cin >> password;
 
-  std::cout << "\rYour password is: " << password << '\n';
-  tcsetattr(STDIN_FILENO, TCSANOW, &oldt); // return to display
+  cout << "\rYour password is: " << password << '\n';
 
   cout << "Show password? Type yes or no: ";
   string seePassword;
@@ -35,14 +35,15 @@ void Prompts::newAccount (string &service, string &username, string &password){
     cin >> seePassword;
     if(seePassword == "yes"){
       cout << "Password: " << password << endl;
-      tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
-      validInput = false;
+      
+   
     }else if(seePassword == "no"){
       validInput = false;
     }else{
       cout << "Invalid input: Type yes or no" << endl;
     }
   }
+
   newcredential.setCredential(service, username, password);
 }
 /*
@@ -57,13 +58,7 @@ void Prompts::changePassword(string &password){
   cout << "Changing password for " << endl;
   // TODO: get service 
   
-  termios oldt;
-  tcgetattr(STDIN_FILENO, &oldt);
-  termios newt = oldt;
-  newt.c_lflag &= ~ECHO;
-  // hides user input
-  tcsetattr(STDIN_FILENO, TCSANOW, &newt);
-
+ 
   // get user input for password
   cin >> password;
 
@@ -75,7 +70,6 @@ void Prompts::changePassword(string &password){
     cin >> seePassword;
     if(seePassword == "yes"){
       cout << "Password: " << password << endl;
-      tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
       validInput = false;
     }else if(seePassword == "no"){
       validInput = false;
@@ -85,14 +79,50 @@ void Prompts::changePassword(string &password){
   }
 }
 
+// Function that accepts and hides the password with '*' as user types.
+string Prompts::getPassword(){ 
+  // Stores the password 
+  char sp = '*';
+  string passwd = ""; 
+  char input; 
+
+  // Until condition is true 
+  while (true) { 
+    // Retrieves characters from the keyboard like cin
+    input = getch(); 
+
+    // if input is ENTER, return 
+    if (input == '\r') { 
+      cout << endl; 
+      return passwd; 
+    } else if (input == IN::IN_BACK && passwd.length() != 0) { 
+      passwd.pop_back(); 
+
+      // Cout statement is very 
+      // important as it will erase 
+      // previously printed character 
+      cout << "\b \b"; 
+      continue; 
+    } 
+
+    // Without using this, program 
+    // will crash as \b can't be 
+    // print in beginning of line 
+    else if (input == IN::IN_BACK && passwd.length() == 0) { 
+      continue; 
+    } 
+
+    passwd.push_back(input); 
+    cout << sp; 
+  } 
+} 
+
 void Prompts::changeUsername(string &username){
   cout << endl << endl << "-----------------------------------------" << endl;
   cout << "|          Changing Username             |" << endl;
   cout << "-----------------------------------------" << endl;
   
-  
   cin >> username;
-
 }
 
 void Prompts::deleteAccount(string &){
