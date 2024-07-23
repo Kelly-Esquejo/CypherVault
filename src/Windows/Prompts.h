@@ -4,27 +4,28 @@
 #include <iostream>
 #include <string>
 
-#include "Credential.h"
+#include "credential.h"
 using namespace std;
 
 class Prompts {
     
-  private:
-  /* Prompts user */
-    
-    Credential newcredential;
+    private:
+        /* Prompts user */
+        
+        Credential newcredential;
 
-  public:
+    public:
     //**********************************************************************
- 
-    void newAccount (string &, string &, string &);
-    void changePassword(string &);
-    void changeUsername(string &);
-    void deleteAccount(string &);
-    int menu();
-    void printMenu();
-    void printInformation();
-    string getPassword();
+    
+        void newAccount (string &, string &, string &);
+        void changePassword(string &);
+        void changeUsername(string &);
+        void deleteAccount(string &);
+        int menu();
+        void printMenu();
+        void printInformation();
+        void displayHelp();
+        string getPassword();
     //**********************************************************************
 
   

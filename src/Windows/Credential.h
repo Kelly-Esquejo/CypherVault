@@ -3,16 +3,22 @@
 
 #include <iostream>
 #include <string>
+#include <sqlite3.h>
 
 using namespace std;
 
 class Credential{
     private:
-    
+        
         string service;
         string username;
         string password;
 
+        sqlite3* DB;
+	
+	    char *errMessage;
+
+        static int callback(void *data, int argc, char** argv, char** azColName);
     public:
         Credential();
         Credential(string, string, string);
@@ -28,6 +34,14 @@ class Credential{
         void setService(const string& newService);
         void setUsername(const string& newUsername);
         void setPassword(const string& newPassword);
+        
+        void createTable();
+        void insertCredential(string service, string username, string password);
+        void deleteCredential();
+        void closeDatabase();
+
+        void displayDatabase();
+        void displayRecord();
 
 };
 
