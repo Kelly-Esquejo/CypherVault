@@ -148,9 +148,16 @@ void Prompts::changeUsername(string &username){
 	Prompts user for -__ to use in the query of deleteCredential();
 
 */
-void Prompts::deleteAccount(string &){
+void Prompts::deleteAccount(){
 	cout << "Enter which account to delete: " << endl;
-	
+	string service;
+	cin >> service; 
+
+	// Check if input is in the column service
+
+	// If not, print message 
+	cout << service << " not in database" << endl;
+	cout << "Enter the service which the account belongs to" << endl;
 
 	cout << endl << endl << "-----------------------------------------" << endl;
 	cout << "|          Deleting Account              |" << endl;

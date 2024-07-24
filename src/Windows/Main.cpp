@@ -4,7 +4,6 @@
 
 #include "credential.h"
 #include "prompts.h"
-//#include "Manager.h"
 #include <sqlite3.h>
 
 using namespace std;
@@ -36,9 +35,12 @@ int main(int argc, char const *argv[]) {
 
 	Credential database;
 	database.createTable();
+
+	// testing database
 	database.insertCredential("Netflix", "User1", "password1");
 	database.displayDatabase();
-	
+	prompt.deleteAccount();
+
 	bool quit = false;
 	while(!quit){
 		prompt.printMenu();
@@ -49,7 +51,7 @@ int main(int argc, char const *argv[]) {
 				prompt.newAccount(service, username, password);
 				break;
 			case 2:
-				prompt.deleteAccount(service);
+				prompt.deleteAccount();
 				break;
 			case 3:
 				prompt.changeUsername(username);

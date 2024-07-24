@@ -60,9 +60,7 @@ void Credential::insertCredential(string service, string username, string passwo
     string query = "SELECT * FROM PERSON;"; 
 
     cout << "Inserting: " << service << " " << username << " " << password << endl;
-    string sql("INSERT INTO PERSON VALUES('STEVE', 'GATES','PALO ALTO');");
-
-   sql = "INSERT INTO PERSON (SERVICE, USER, PASSWORD) VALUES (?, ?, ?);";
+    string sql = "INSERT INTO PERSON (SERVICE, USER, PASSWORD) VALUES (?, ?, ?);";
     // Prepare the statement
     int exit = sqlite3_prepare_v2(DB, sql.c_str(), -1, &stmt, 0);
     if (exit != SQLITE_OK) {
@@ -70,9 +68,7 @@ void Credential::insertCredential(string service, string username, string passwo
         return;
     }
 
-    // Bind the parameters to the SQL statement
-
-    sqlite3_bind_text(stmt, 1, service.c_str(), -1, SQLITE_TRANSIENT);
+    // Bind the parameters to the SQL statement    sqlite3_bind_text(stmt, 1, service.c_str(), -1, SQLITE_TRANSIENT);
     sqlite3_bind_text(stmt, 2, username.c_str(), -1, SQLITE_TRANSIENT);
     sqlite3_bind_text(stmt, 3, password.c_str(), -1, SQLITE_TRANSIENT);
 
@@ -110,9 +106,12 @@ void Credential::deleteCredential(){
 }
 
 /*
-    
+
 */
 void Credential::displayDatabase(){
+    //TODO: 
+    // Check if table is empty
+    // Display that the table is empty
     string query = "SELECT * FROM PERSON;";
     cout << "-----------------------------------------" << endl;
     cout << "|            STATE OF TABLE             |" << endl;

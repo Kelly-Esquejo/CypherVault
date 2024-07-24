@@ -20,7 +20,8 @@ class Prompts {
         void newAccount (string &, string &, string &);
         void changePassword(string &);
         void changeUsername(string &);
-        void deleteAccount(string &);
+        void deleteAccount();
+        
         int menu();
         void printMenu();
         void printInformation();
