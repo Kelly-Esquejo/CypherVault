@@ -93,6 +93,9 @@ void Credential::insertCredential(string service, string username, string passwo
 	// }
 }
 
+bool Credential::serviceExists(string service){
+    
+}
 void Credential::deleteCredential(){
     string sql = "DELETE FROM PERSON WHERE ID = 2;" ;
 	int exit = sqlite3_exec(DB, sql.c_str(), NULL, 0, &errMessage);
