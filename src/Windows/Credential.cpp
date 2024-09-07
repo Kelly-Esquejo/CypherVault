@@ -125,7 +125,7 @@ void Credential::displayRecord(){
 
 }
 
-// Constructor definition
+
 Credential::Credential(){
     service = "";
     username = "";
