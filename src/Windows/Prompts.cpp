@@ -3,6 +3,8 @@
 #include <unistd.h>
 #include <conio.h> 
 
+
+string commonPasswords[]  = {"qwerty", "password", "abc123", "uiop"};
 //**********************************************************************
 // Enumerator 
 enum IN { 
@@ -20,8 +22,11 @@ void Prompts::newAccount (string &service, string &username, string &password){
 	cout  << endl << endl << "----------------------------------------" << endl;
 	cout << "|            Account Setup             |" << endl;
 	cout << "----------------------------------------" << endl;
-	cout << "Enter service: ";
+	cout << "Enter service or type 'exit' to quit: ";
 	cin >> service;
+	if(service == "exit"){
+		return;
+	}
 	cout << "Enter email or username for " << service << ": ";
 	cin >> username;
 	cout << "Enter password for " << username << " on " << service << ": ";
@@ -33,10 +38,18 @@ void Prompts::newAccount (string &service, string &username, string &password){
 	while(isValid){
 		// check length
 		
-		if(password.length() < 12){
+		if(password.length() >= 12){
+			bool hasUpper = false, hasLower = false, hasDigit = false, hasSpecial = false;
+
 			cout << "Password length needs to be at least 12 characters." << endl;
 			// check complexity
 			// Does it include at least one special character, uppercase, lowercase, and number
+			for (char ch : password){
+				if (isupper(ch)) hasUpper = true;
+				else if (islower(ch)) hasLower = true;
+				else if (isdigit(ch)) hasDigit = true;
+				else if (ispunct(ch)) hasSpecial = true;
+			}
 
 			// check if common password
 

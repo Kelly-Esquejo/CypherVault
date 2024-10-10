@@ -4,7 +4,7 @@
 
 #include "credential.h"
 #include "prompts.h"
-//#include "Manager.h"
+
 #include <sqlite3.h>
 
 using namespace std;
