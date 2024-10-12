@@ -26,6 +26,7 @@ class Prompts {
         void printInformation();
         void displayHelp();
         string getPassword();
+        bool checkPasswordValidity(string &);
     //**********************************************************************
 
   

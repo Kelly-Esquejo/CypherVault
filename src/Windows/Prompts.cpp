@@ -3,7 +3,7 @@
 #include <unistd.h>
 #include <conio.h> 
 
-
+using namespace std;
 string commonPasswords[]  = {"qwerty", "password", "abc123", "uiop"};
 //**********************************************************************
 // Enumerator 
@@ -29,36 +29,22 @@ void Prompts::newAccount (string &service, string &username, string &password){
 	}
 	cout << "Enter email or username for " << service << ": ";
 	cin >> username;
-	cout << "Enter password for " << username << " on " << service << ": ";
+	cout << "Enter password for " << username << " for " << service << ": ";
 
 	password = getPassword();
 
 	// Checks validity of password
 	bool isValid = true;
-	while(isValid){
-		// check length
-		
-		if(password.length() >= 12){
-			bool hasUpper = false, hasLower = false, hasDigit = false, hasSpecial = false;
-
-			cout << "Password length needs to be at least 12 characters." << endl;
-			// check complexity
-			// Does it include at least one special character, uppercase, lowercase, and number
-			for (char ch : password){
-				if (isupper(ch)) hasUpper = true;
-				else if (islower(ch)) hasLower = true;
-				else if (isdigit(ch)) hasDigit = true;
-				else if (ispunct(ch)) hasSpecial = true;
-			}
-
-			// check if common password
-
-			// check history
-
-			isValid = false;
+	while(!checkPasswordValidity(password)){
+		cout << "Invalid password. Please try again.\n";
+		cout << "Enter password for " << username << " for " << service << ": ";
+		cout << "or 'exit' to quit: " ;
+		password = getPassword();
+		if(password == "exit"){
+			return;
 		}
 	}
-	
+
 	bool validInput = true;
 	cout << "Show password? Type 1 (yes) or 2 (no): ";
 	string seePassword;
@@ -77,6 +63,44 @@ void Prompts::newAccount (string &service, string &username, string &password){
 	newcredential.setCredential(service, username, password);
 }
 
+// Checks the validity of a password
+bool Prompts::checkPasswordValidity(string &password){
+	if(password.length() < 12){
+		cout << "Password length is less than 12" << endl;
+		return false;
+	}
+
+	bool hasUpper = false, hasLower = false, hasDigit = false, hasSpecial = false;
+
+	cout << "Password length needs to be at least 12 characters." << endl;
+	// check complexity
+	// Does it include at least one special character, uppercase, lowercase, and number
+	for (char ch : password){
+		if (isupper(ch)) hasUpper = true;
+		else if (islower(ch)) hasLower = true;
+		else if (isdigit(ch)) hasDigit = true;
+		else if (ispunct(ch)) hasSpecial = true;
+	}
+
+	if(!hasUpper){
+		cout << "Password is missing an uppercase letter" << endl;
+	}
+	if(!hasLower){
+		cout << "Password is missing a lowercase letter" << endl;
+	}
+	if(!hasDigit){
+		cout << "Password is missing a number" << endl;
+	}
+	if(!hasSpecial){
+		cout << "Password is missing a special character" << endl;
+	}
+
+	// check if common password
+
+	// check history
+	return hasUpper && hasLower && hasDigit && hasSpecial;
+	
+}
 /*
 	Changes password while hiding user input as user types
 
