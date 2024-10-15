@@ -44,35 +44,39 @@ void Prompts::newAccount (string &service, string &username, string &password){
 			return;
 		}
 	}
+	showPassword(password);
+	newCredential.setCredential(service, username, password);
+}
 
+void Prompts::showPassword(string &password){
 	bool validInput = true;
-	cout << "Show password? Type 1 (yes) or 2 (no): ";
+	cout << "Show password? Type 'yes' or 'no': ";
 	string seePassword;
 
 	while(validInput){
 		cin >> seePassword;
 
-		if(seePassword == "1"){
+		if(seePassword == "yes"){
 			cout << "Password: " << password << endl;
-		}else if(seePassword == "2"){
+			validInput = false;
+		}else if(seePassword == "no"){
 			validInput = false;
 		}else{
-			cout << "Invalid input: Type 1 (yes) or 2 (no)" << endl;
+			cout << "Invalid input: Type 'yes' or 'no': " << endl;
 		}
 	}
-	newcredential.setCredential(service, username, password);
 }
 
 // Checks the validity of a password
 bool Prompts::checkPasswordValidity(string &password){
 	if(password.length() < 12){
-		cout << "Password length is less than 12" << endl;
+		cout << "Password length needs to be at least 12 characters.\n\n" ;
+
 		return false;
 	}
 
 	bool hasUpper = false, hasLower = false, hasDigit = false, hasSpecial = false;
 
-	cout << "Password length needs to be at least 12 characters." << endl;
 	// check complexity
 	// Does it include at least one special character, uppercase, lowercase, and number
 	for (char ch : password){
@@ -83,16 +87,16 @@ bool Prompts::checkPasswordValidity(string &password){
 	}
 
 	if(!hasUpper){
-		cout << "Password is missing an uppercase letter" << endl;
+		cout << "Password is missing an uppercase letter. \n\n";
 	}
 	if(!hasLower){
-		cout << "Password is missing a lowercase letter" << endl;
+		cout << "Password is missing a lowercase letter. \n\n";
 	}
 	if(!hasDigit){
-		cout << "Password is missing a number" << endl;
+		cout << "Password is missing a number. \n\n";
 	}
 	if(!hasSpecial){
-		cout << "Password is missing a special character" << endl;
+		cout << "Password is missing a special character. \n\n";
 	}
 
 	// check if common password
@@ -112,25 +116,22 @@ void Prompts::changePassword(string &password){
 
 	cout << "Changing password for " << endl;
 	// TODO: get service 
-
+	// newCredential.setPassword(password);
 	// get user input for password
 	cin >> password;
-
+	// Checks validity of password
+	// bool isValid = true;
+	// while(!checkPasswordValidity(password)){
+	// 	cout << "Invalid password. Please try again.\n";
+	// 	cout << "Enter password for " << username << " for " << service << ": ";
+	// 	cout << "or 'exit' to quit: " ;
+	// 	password = getPassword();
+	// 	if(password == "exit"){
+	// 		return;
+	// 	}
+	// }
 	// see if user wants to see password
-	string seePassword;
-	cout << "Show password? Type yes or no: ";
-	bool validInput = true;
-	while(validInput){
-		cin >> seePassword;
-		if(seePassword == "yes"){
-			cout << "Password: " << password << endl;
-			validInput = false;
-		}else if(seePassword == "no"){
-			validInput = false;
-		}else{
-			cout << "Invalid input: Type yes or no" << endl;
-		}
-	}
+	showPassword(password);
 }
 
 /*
@@ -176,7 +177,12 @@ string Prompts::getPassword(){
 void Prompts::changeUsername(string &username){
 	cout << endl << endl << "-----------------------------------------" << endl;
 	cout << "|          Changing Username             |" << endl;
-	cout << "-----------------------------------------" << endl;
+	cout << "-----------------------------------------" << endl << endl;
+
+	// TODO: get service 
+	string service;
+	cout << "Changing username for: " << endl;
+	cin >> service;
 
 	cin >> username;
 }

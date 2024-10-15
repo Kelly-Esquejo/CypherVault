@@ -12,7 +12,7 @@ class Prompts {
     private:
         /* Prompts user */
         
-        Credential newcredential;
+        Credential newCredential;
 
     public:
     //**********************************************************************
@@ -27,6 +27,7 @@ class Prompts {
         void displayHelp();
         string getPassword();
         bool checkPasswordValidity(string &);
+        void showPassword(string &);
     //**********************************************************************
 
   

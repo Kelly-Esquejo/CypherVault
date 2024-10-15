@@ -31,7 +31,8 @@ void Credential::createTable(){
     }
 
     // Create the table
-    string sql = "CREATE TABLE PERSON("
+    string sql = "CREATE TABLE CREDENTIALS("
+                    "ID         INTEGER  PRIMARY KEY, "
                     "SERVICE     TEXT    NOT NULL, "
                     "USER        TEXT    NOT NULL, "
                     "PASSWORD    TEXT    NOT NULL);";
@@ -57,12 +58,12 @@ void Credential::closeDatabase(){
 
 void Credential::insertCredential(string service, string username, string password){
     sqlite3_stmt* stmt;
-    string query = "SELECT * FROM PERSON;"; 
+    string query = "SELECT * FROM CREDENTIALS;"; 
 
     cout << "Inserting: " << service << " " << username << " " << password << endl;
-    string sql("INSERT INTO PERSON VALUES('STEVE', 'GATES','PALO ALTO');");
+    
 
-   sql = "INSERT INTO PERSON (SERVICE, USER, PASSWORD) VALUES (?, ?, ?);";
+    string sql = "INSERT INTO CREDENTIALS (SERVICE, USER, PASSWORD) VALUES (?, ?, ?);";
     // Prepare the statement
     int exit = sqlite3_prepare_v2(DB, sql.c_str(), -1, &stmt, 0);
     if (exit != SQLITE_OK) {
@@ -113,7 +114,7 @@ void Credential::deleteCredential(){
     
 */
 void Credential::displayDatabase(){
-    string query = "SELECT * FROM PERSON;";
+    string query = "SELECT * FROM CREDENTIALS;";
     cout << "-----------------------------------------" << endl;
     cout << "|            STATE OF TABLE             |" << endl;
 	cout << "-----------------------------------------" << endl;
@@ -171,5 +172,6 @@ void Credential::setUsername(const string& newUsername) {
 }
 
 void Credential::setPassword(const string& newPassword) {
-    password = newPassword;
+    sqlite3* stmt;
+    // string query = "UPDATE CREDENTIALS SET PASSWORD = ' ' WHERE ID = ";
 }

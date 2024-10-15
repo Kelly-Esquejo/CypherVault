@@ -35,9 +35,9 @@ int main(int argc, char const *argv[]) {
 	string service, username, password;
 
 	Credential database;
-	// database.createTable();
-	// database.insertCredential("Netflix", "User1", "password1");
-	// database.displayDatabase();
+	database.createTable();
+	database.insertCredential("Netflix", "User1", "password1");
+	database.displayDatabase();
 	
 	bool quit = false;
 	while(!quit){
