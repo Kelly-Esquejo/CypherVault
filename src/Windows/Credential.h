@@ -42,7 +42,7 @@ class Credential{
 
         void displayDatabase();
         void displayRecord();
-
+        void findCredential(const string &);
 };
 
 

@@ -34,11 +34,10 @@ int main(int argc, char const *argv[]) {
 	Prompts prompt;
 	string service, username, password;
 
-	Credential database;
-	database.createTable();
-	database.insertCredential("Netflix", "User1", "password1");
-	database.displayDatabase();
-	
+	// Credential database;
+	// database.createTable();
+	// database.insertCredential("Netflix", "User1", "password1");
+	// database.displayDatabase();
 	bool quit = false;
 	while(!quit){
 		prompt.printMenu();
@@ -60,10 +59,13 @@ int main(int argc, char const *argv[]) {
 			case 5:
 				prompt.displayHelp();
 				break;
-			case 6: 
+			case 6:
+				prompt.printInformation();
+				break;
+			case 7: 
 				quit = true;
 				cout << "\n\n~~~~~Exiting CypherVault~~~~~\n\n" << endl;
-			break;
+				break;
 		}
 	}
 

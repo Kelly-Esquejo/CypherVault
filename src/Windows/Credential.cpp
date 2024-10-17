@@ -31,7 +31,7 @@ void Credential::createTable(){
     }
 
     // Create the table
-    string sql = "CREATE TABLE CREDENTIALS("
+    string query = "CREATE TABLE CREDENTIALS("
                     "ID         INTEGER  PRIMARY KEY, "
                     "SERVICE     TEXT    NOT NULL, "
                     "USER        TEXT    NOT NULL, "
@@ -39,7 +39,7 @@ void Credential::createTable(){
                     
     int exit = 0; 
 
-    exit = sqlite3_exec(DB, sql.c_str(), NULL, 0, &errMessage);
+    exit = sqlite3_exec(DB, query.c_str(), NULL, 0, &errMessage);
     
     if(exit != SQLITE_OK){
         cerr << "Error Create Table" << endl;
@@ -56,23 +56,28 @@ void Credential::closeDatabase(){
     sqlite3_close(DB);
 }
 
+/*
+The life-cycle of a prepared statement object usually goes like this:
+
+Create the prepared statement object using sqlite3_prepare_v2().
+Bind values to parameters using the sqlite3_bind_*() interfaces.
+Run the SQL by calling sqlite3_step() one or more times.
+Reset the prepared statement using sqlite3_reset() then go back to step 2. Do this zero or more times.
+Destroy the object using sqlite3_finalize().
+*/
 void Credential::insertCredential(string service, string username, string password){
     sqlite3_stmt* stmt;
-    string query = "SELECT * FROM CREDENTIALS;"; 
-
-    cout << "Inserting: " << service << " " << username << " " << password << endl;
-    
-
-    string sql = "INSERT INTO CREDENTIALS (SERVICE, USER, PASSWORD) VALUES (?, ?, ?);";
+    // TESTING
+    cout << "Inserting credentials: " << service << " " << username << " " << password << endl;
+    string query = "INSERT INTO CREDENTIALS (SERVICE, USER, PASSWORD) VALUES (?, ?, ?);";
     // Prepare the statement
-    int exit = sqlite3_prepare_v2(DB, sql.c_str(), -1, &stmt, 0);
+    int exit = sqlite3_prepare_v2(DB, query.c_str(), -1, &stmt, 0);
     if (exit != SQLITE_OK) {
-        std::cerr << "Error preparing statement: " << sqlite3_errmsg(DB) << std::endl;
+        std::cerr << "Error preparing statement for INSERT: " << sqlite3_errmsg(DB) << std::endl;
         return;
     }
 
     // Bind the parameters to the SQL statement
-
     sqlite3_bind_text(stmt, 1, service.c_str(), -1, SQLITE_TRANSIENT);
     sqlite3_bind_text(stmt, 2, username.c_str(), -1, SQLITE_TRANSIENT);
     sqlite3_bind_text(stmt, 3, password.c_str(), -1, SQLITE_TRANSIENT);
@@ -85,7 +90,7 @@ void Credential::insertCredential(string service, string username, string passwo
         std::cout << "Record created successfully!" << std::endl;
     }
 
-    // Finalize the statement to release resources
+    // Destruct - Finalize the statement to release resources
     sqlite3_finalize(stmt);
   
 	// int exit = sqlite3_exec(DB, sql.c_str(), NULL, 0, &errMessage);
@@ -99,8 +104,8 @@ void Credential::insertCredential(string service, string username, string passwo
 }
 
 void Credential::deleteCredential(){
-    string sql = "DELETE FROM PERSON WHERE ID = 2;" ;
-	int exit = sqlite3_exec(DB, sql.c_str(), NULL, 0, &errMessage);
+    string query = "DELETE FROM CREDENTIALS WHERE ID = 2;" ;
+	int exit = sqlite3_exec(DB, query.c_str(), NULL, 0, &errMessage);
 
 	if(exit != SQLITE_OK){
 		cerr << "Error DELETE" << endl;
@@ -111,7 +116,7 @@ void Credential::deleteCredential(){
 }
 
 /*
-    
+    Displays all credentials to the console
 */
 void Credential::displayDatabase(){
     string query = "SELECT * FROM CREDENTIALS;";
@@ -128,12 +133,11 @@ void Credential::displayRecord(){
 
 
 Credential::Credential(){
-    service = "";
-    username = "";
-    password = "";
+   createTable();
 }
 
 Credential::Credential(string x, string y, string z) {
+    
     service = x;
     username = y;
     password = z;
@@ -173,5 +177,29 @@ void Credential::setUsername(const string& newUsername) {
 
 void Credential::setPassword(const string& newPassword) {
     sqlite3* stmt;
-    // string query = "UPDATE CREDENTIALS SET PASSWORD = ' ' WHERE ID = ";
+    string query = "UPDATE CREDENTIALS SET PASSWORD = newPassword WHERE ID = 1";
+
+}
+
+void Credential::findCredential(const string& str){
+    sqlite3_stmt* stmt;
+    string query = "SELECT * FROM CREDENTIALS WHERE ID LIKE '%str%'";
+    int exit = sqlite3_prepare_v2(DB, query.c_str(), -1, &stmt, 0);
+    if (exit != SQLITE_OK) {
+        std::cerr << "\nError preparing statement: " << sqlite3_errmsg(DB) << std::endl;
+        return;
+    }
+
+    // Bind the parameters to the SQL statement
+
+    // Execute the statement
+    exit = sqlite3_step(stmt);
+    if (exit != SQLITE_DONE) {
+        std::cerr << "Error executing statement: " << sqlite3_errmsg(DB) << std::endl;
+    } else {
+        std::cout << "Record created successfully!" << std::endl;
+    }
+    
+    // Destruct
+    sqlite3_finalize(stmt);
 }

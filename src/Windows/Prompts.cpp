@@ -45,7 +45,7 @@ void Prompts::newAccount (string &service, string &username, string &password){
 		}
 	}
 	showPassword(password);
-	newCredential.setCredential(service, username, password);
+	newCredential.insertCredential(service, username, password);
 }
 
 void Prompts::showPassword(string &password){
@@ -113,11 +113,16 @@ void Prompts::changePassword(string &password){
 	cout << endl << endl << "-----------------------------------------" << endl;
 	cout << "|          Changing Password            |" << endl;
 	cout << "-----------------------------------------" << endl;
-
-	cout << "Changing password for " << endl;
+	
+	string service;
+	cout << "Changing password for: ";
 	// TODO: get service 
+	cin >> service;
+
+	newCredential.findCredential(service);
 	// newCredential.setPassword(password);
 	// get user input for password
+	cout << "New password: ";
 	cin >> password;
 	// Checks validity of password
 	// bool isValid = true;
@@ -220,7 +225,8 @@ void Prompts::printMenu(){
 	cout << "| 3. Change Account                     |" << endl;
 	cout << "| 4. Change Password                    |" << endl;
 	cout << "| 5. Help                               |" << endl;
-	cout << "| 6. Exit                               |" << endl;
+	cout << "| 6. Display credentials                |" << endl;
+	cout << "| 7. Exit                               |" << endl;
 	cout << "-----------------------------------------" << endl;
 }
 
@@ -229,16 +235,7 @@ void Prompts::printMenu(){
 
 */
 void Prompts::printInformation(){
-	// Prompt user which record to display
-	cout << "Enter the record ID you want to display: ";
-	
-	cout << endl << endl << "-----------------------------------------" << endl;
-	cout << "|          Account Information          |" << endl;
-	cout << "-----------------------------------------" << endl;
-	//  cout << "Service: " << service << endl;
-	// cout << "Email: " << username << endl;
-	cout << "Password: ********" << endl;
-	cout << "---------------------------" << endl;
+	newCredential.displayDatabase();
 }
 
 
@@ -280,8 +277,8 @@ void Prompts::displayHelp(){
     cout << "|      information about the various    |" << endl;
     cout << "|      options available in the main    |" << endl;
     cout << "|      menu.                            |" << endl;
-    cout << "|                                       |" << endl;
-    cout << "| 6. Exit                               |" << endl;
+    cout << "| 6. Display Credentials                |" << endl;
+    cout << "| 7. Exit                               |" << endl;
     cout << "|    - Select this option to exit the   |" << endl;
     cout << "|      application.                     |" << endl;
     cout << "-----------------------------------------" << endl;
