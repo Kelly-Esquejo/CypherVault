@@ -175,7 +175,7 @@ void Credential::setUsername(const string& newUsername) {
     username = newUsername;
 }
 
-void Credential::setPassword(const string& newPassword, int id) {
+void Credential::setPassword(int id, const string& newPassword) {
     sqlite3_stmt* stmt;
     string query = "UPDATE CREDENTIALS SET PASSWORD = ? WHERE ID = ?";
     
@@ -210,7 +210,7 @@ void Credential::setPassword(const string& newPassword, int id) {
     sqlite3_finalize(stmt);
 }
 
-bool Credential::findCredential(const string& str) {
+bool Credential::findCredential(const string& str, int &id) {
     sqlite3_stmt* stmt;
     string query = "SELECT * FROM CREDENTIALS WHERE SERVICE LIKE ?";  // Use a placeholder
 
@@ -233,7 +233,7 @@ bool Credential::findCredential(const string& str) {
     while ((exit = sqlite3_step(stmt)) == SQLITE_ROW) {
         found = true;  // At least one record was found
 
-        int id = sqlite3_column_int(stmt, 0);  // Assuming 'ID' is the first column
+        id = sqlite3_column_int(stmt, 0);  // Assuming 'ID' is the first column
         const unsigned char* service = sqlite3_column_text(stmt, 1);
         const unsigned char* user = sqlite3_column_text(stmt, 2);
         const unsigned char* password = sqlite3_column_text(stmt, 3);

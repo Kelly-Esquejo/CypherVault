@@ -33,7 +33,7 @@ class Credential{
         void setCredential(string, string, string);
         void setService(const string& newService);
         void setUsername(const string& newUsername);
-        void setPassword(const string& newPassword, int id);
+        void setPassword(int id, const string& newPassword);
         
         void createTable();
         void insertCredential(string service, string username, string password);
@@ -42,7 +42,7 @@ class Credential{
 
         void displayDatabase();
         void displayRecord();
-        bool findCredential(const string &);
+        bool findCredential(const string &, int &id);
 };
 
 

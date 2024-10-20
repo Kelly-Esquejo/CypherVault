@@ -115,7 +115,7 @@ void Prompts::changePassword(string &password){
 	cout << "-----------------------------------------" << endl;
 	
 	string service;
-
+	int id;
 	// Search for the service in the database
 	// Prompt user for a valid service, with an option to exit
     while (true) {
@@ -128,18 +128,18 @@ void Prompts::changePassword(string &password){
         }
 
         // Check if the service exists
-        if (newCredential.findCredential(service)) {
+        if (newCredential.findCredential(service, id)) {
             break;  // Exit loop if service is found
         } else {
             cout << "Service not found. Please try again.\n";
         }
     }
 
-	// newCredential.setPassword(password);
+
 	// get user input for password
 	cout << "New password: ";
 	cin >> password;
-	// Checks validity of password
+
 	// Checks validity of password
 	bool isValid = true;
 	while(!checkPasswordValidity(password)){
@@ -152,7 +152,7 @@ void Prompts::changePassword(string &password){
 		}
 	}
 	showPassword(password);
-
+	newCredential.setPassword(id, password);
 }
 
 /*
