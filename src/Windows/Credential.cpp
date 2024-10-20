@@ -175,31 +175,79 @@ void Credential::setUsername(const string& newUsername) {
     username = newUsername;
 }
 
-void Credential::setPassword(const string& newPassword) {
-    sqlite3* stmt;
-    string query = "UPDATE CREDENTIALS SET PASSWORD = newPassword WHERE ID = 1";
-
-}
-
-void Credential::findCredential(const string& str){
+void Credential::setPassword(const string& newPassword, int id) {
     sqlite3_stmt* stmt;
-    string query = "SELECT * FROM CREDENTIALS WHERE ID LIKE '%str%'";
-    int exit = sqlite3_prepare_v2(DB, query.c_str(), -1, &stmt, 0);
-    if (exit != SQLITE_OK) {
+    string query = "UPDATE CREDENTIALS SET PASSWORD = ? WHERE ID = ?";
+    
+    // Prepare statement
+    if(sqlite3_prepare16_v2(DB, query.c_str(), -1, &stmt, nullptr) != SQLITE_OK){
         std::cerr << "\nError preparing statement: " << sqlite3_errmsg(DB) << std::endl;
         return;
     }
 
-    // Bind the parameters to the SQL statement
+    // Bind the new password to the first placeholder
+    if (sqlite3_bind_text(stmt, 1, newPassword.c_str(), -1, SQLITE_TRANSIENT) != SQLITE_OK) {
+        cerr << "Error binding password: " << sqlite3_errmsg(DB) << endl;
+        sqlite3_finalize(stmt);
+        return;
+    }
+
+    // Bind the ID to the second placeholder
+    if (sqlite3_bind_int(stmt, 2, id) != SQLITE_OK) {
+        cerr << "Error binding ID: " << sqlite3_errmsg(DB) << endl;
+        sqlite3_finalize(stmt);
+        return;
+    }
 
     // Execute the statement
-    exit = sqlite3_step(stmt);
-    if (exit != SQLITE_DONE) {
-        std::cerr << "Error executing statement: " << sqlite3_errmsg(DB) << std::endl;
+    if (sqlite3_step(stmt) != SQLITE_DONE) {
+        cerr << "Error executing statement: " << sqlite3_errmsg(DB) << endl;
     } else {
-        std::cout << "Record created successfully!" << std::endl;
+        cout << "Password updated successfully!" << endl;
     }
-    
-    // Destruct
+
+    // Finalize the statement
     sqlite3_finalize(stmt);
+}
+
+bool Credential::findCredential(const string& str) {
+    sqlite3_stmt* stmt;
+    string query = "SELECT * FROM CREDENTIALS WHERE SERVICE LIKE ?";  // Use a placeholder
+
+    // Prepare the SQL statement
+    int exit = sqlite3_prepare_v2(DB, query.c_str(), -1, &stmt, 0);
+    if (exit != SQLITE_OK) {
+        return false;  // Return false on error
+    }
+
+    // Bind the `str` parameter to the placeholder with wildcards for partial matching
+    string likeStr = "%" + str + "%";  // Add the wildcards to `str` for partial matching
+    exit = sqlite3_bind_text(stmt, 1, likeStr.c_str(), -1, SQLITE_TRANSIENT);  // Bind to the first placeholder
+    if (exit != SQLITE_OK) {
+        sqlite3_finalize(stmt);
+        return false;  // Return false on error
+    }
+
+    // Execute the statement and check for results
+    bool found = false;
+    while ((exit = sqlite3_step(stmt)) == SQLITE_ROW) {
+        found = true;  // At least one record was found
+
+        int id = sqlite3_column_int(stmt, 0);  // Assuming 'ID' is the first column
+        const unsigned char* service = sqlite3_column_text(stmt, 1);
+        const unsigned char* user = sqlite3_column_text(stmt, 2);
+        const unsigned char* password = sqlite3_column_text(stmt, 3);
+        
+        // Process or print the found record as needed
+        std::cout << "ID: " << id 
+                  << ", Service: " << service 
+                  << ", User: " << user 
+                  << ", Password: " << password 
+                  << std::endl;
+    }
+
+    // Finalize the statement
+    sqlite3_finalize(stmt);
+
+    return found;  // Return true if found, otherwise false
 }
