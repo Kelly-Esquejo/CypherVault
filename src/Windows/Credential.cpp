@@ -230,7 +230,9 @@ bool Credential::findCredential(const string& str, int &id) {
     }
 
     // Execute the statement and check for results
+    vector<int> ids;
     bool found = false;
+    int count = 0;
     while ((exit = sqlite3_step(stmt)) == SQLITE_ROW) {
         found = true;  // At least one record was found
 
@@ -238,7 +240,11 @@ bool Credential::findCredential(const string& str, int &id) {
         const unsigned char* service = sqlite3_column_text(stmt, 1);
         const unsigned char* user = sqlite3_column_text(stmt, 2);
         const unsigned char* password = sqlite3_column_text(stmt, 3);
-        
+
+        // Store id to the vector and increment count
+        ids.push_back(id);
+        count++;
+
         // Process or print the found record as needed
         std::cout << "ID: " << id 
                   << ", Service: " << service 
@@ -246,9 +252,35 @@ bool Credential::findCredential(const string& str, int &id) {
                   << ", Password: " << password 
                   << std::endl;
     }
+    if(count > 1){
+        cout << "Multiple credentials found under '" << str << "'\n";
+        int selectedID;
+        bool valid = false;
+        while(!valid){
+            cout << "Choose an ID: ";
+            
+            cin >> selectedID;
 
+            // Check if selected ID is valid
+            for(int id : ids){
+                if(id == selectedID){
+                    valid = true;
+                    break;
+                }
+            }
+
+            if(!valid){
+                cout << "Invalid ID. Choose a valid ID from the list: ";
+                for(int id : ids) {
+                    cout << id << "  ";
+                } 
+            }
+
+        }
+        id = selectedID;
+    }
     // Finalize the statement
     sqlite3_finalize(stmt);
-
+    
     return found;  // Return true if found, otherwise false
 }
