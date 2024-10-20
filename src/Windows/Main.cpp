@@ -66,6 +66,10 @@ int main(int argc, char const *argv[]) {
 				quit = true;
 				cout << "\n\n~~~~~Exiting CypherVault~~~~~\n\n" << endl;
 				break;
+			default:
+				cout << "Invalid choice. Please enter a number between 1 and 7. \n\n";
+				break;
+
 		}
 	}
 
