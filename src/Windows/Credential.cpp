@@ -178,20 +178,20 @@ void Credential::setUsername(const string& newUsername) {
 void Credential::setPassword(int id, const string& newPassword) {
     sqlite3_stmt* stmt;
     string query = "UPDATE CREDENTIALS SET PASSWORD = ? WHERE ID = ?";
-    
+ 
     // Prepare statement
-    if(sqlite3_prepare16_v2(DB, query.c_str(), -1, &stmt, nullptr) != SQLITE_OK){
+    if(sqlite3_prepare_v2(DB, query.c_str(), -1, &stmt, nullptr) != SQLITE_OK){
         std::cerr << "\nError preparing statement: " << sqlite3_errmsg(DB) << std::endl;
         return;
     }
-
+  
     // Bind the new password to the first placeholder
     if (sqlite3_bind_text(stmt, 1, newPassword.c_str(), -1, SQLITE_TRANSIENT) != SQLITE_OK) {
         cerr << "Error binding password: " << sqlite3_errmsg(DB) << endl;
         sqlite3_finalize(stmt);
         return;
     }
-
+ 
     // Bind the ID to the second placeholder
     if (sqlite3_bind_int(stmt, 2, id) != SQLITE_OK) {
         cerr << "Error binding ID: " << sqlite3_errmsg(DB) << endl;
@@ -200,12 +200,13 @@ void Credential::setPassword(int id, const string& newPassword) {
     }
 
     // Execute the statement
-    if (sqlite3_step(stmt) != SQLITE_DONE) {
-        cerr << "Error executing statement: " << sqlite3_errmsg(DB) << endl;
+    int exit = sqlite3_step(stmt);
+    if (exit != SQLITE_DONE) {
+        std::cerr << "Error executing statement: " << sqlite3_errmsg(DB) << std::endl;
     } else {
-        cout << "Password updated successfully!" << endl;
+        std::cout << "Password updated successfully!" << std::endl;
     }
-
+   
     // Finalize the statement
     sqlite3_finalize(stmt);
 }
@@ -213,7 +214,7 @@ void Credential::setPassword(int id, const string& newPassword) {
 bool Credential::findCredential(const string& str, int &id) {
     sqlite3_stmt* stmt;
     string query = "SELECT * FROM CREDENTIALS WHERE SERVICE LIKE ?";  // Use a placeholder
-
+    
     // Prepare the SQL statement
     int exit = sqlite3_prepare_v2(DB, query.c_str(), -1, &stmt, 0);
     if (exit != SQLITE_OK) {

@@ -152,6 +152,7 @@ void Prompts::changePassword(string &password){
 		}
 	}
 	showPassword(password);
+	cout << "Updating password.\n\n";
 	newCredential.setPassword(id, password);
 }
 
