@@ -7,7 +7,7 @@ Password Manager
 + [Contributing](../CONTRIBUTING.md)
 
 ## About <a name = "about"></a>
-- The purpose of CypherVault is to enhance my personal learning in SQLite and OpenSSL. It aims to deepen my understanding with data management, data integration, and encryption. 
+• A terminal-based, multi-factor authentication password manager using C++ and SQLite and implementing AES encryption with OpenSSL to ensure data security.
 
 ## Features <a name = "features"></a>
 ```
@@ -18,12 +18,8 @@ Password Manager
 ## Getting Started <a name = "getting_started"></a>
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See [deployment](#deployment) for notes on how to deploy the project on a live system.
 
-
-
 ### Installing
-
 Will be using Docker for Installation and setup
-
 
 ### Bugs
 If you discover bugs, please report them in Github Issues.
