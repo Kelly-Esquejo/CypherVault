@@ -203,10 +203,24 @@ void Prompts::changeUsername(string &username){
 
 	// TODO: get service 
 	string service;
-	cout << "Changing username for: " << endl;
-	cin >> service;
+	int id;
+	while (true) {
+        cout << "Enter service to change username for (or 'exit' to cancel): ";
+        cin >> service;
 
-	cin >> username;
+        if (service == "exit") {
+            cout << "Changing username canceled.\n";
+            return;
+        }
+
+        // Check if the service exists
+        if (newCredential.findCredential(service, id)) {
+            break;  // Exit loop if service is found
+        } else {
+            cout << "Service not found. Please try again.\n";
+        }
+    }
+
 }
 
 /*
@@ -234,7 +248,7 @@ int Prompts::menu(){
 }
 
 void Prompts::printMenu(){
-	cout << endl << endl << "-----------------------------------------" << endl;
+	cout << "\n\n-----------------------------------------" << endl;
 	cout << "|                Menu                   |" << endl;
 	cout << "-----------------------------------------" << endl;
 	cout << "| 1. New Accounts                       |" << endl;
@@ -257,7 +271,7 @@ void Prompts::printInformation(){
 
 
 void Prompts::displayHelp(){
-	cout << endl << endl << "-----------------------------------------" << endl;
+	cout << "\n\n-----------------------------------------" << endl;
 	cout << "|                Menu                   |" << endl;
 	cout << "-----------------------------------------" << endl;
 	cout << "| 1. New Accounts                       |" << endl;

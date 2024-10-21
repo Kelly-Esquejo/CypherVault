@@ -221,9 +221,11 @@ bool Credential::findCredential(const string& str, int &id) {
         return false;  // Return false on error
     }
 
+    // To avoid SQL injections
     // Bind the `str` parameter to the placeholder with wildcards for partial matching
-    string likeStr = "%" + str + "%";  // Add the wildcards to `str` for partial matching
-    exit = sqlite3_bind_text(stmt, 1, likeStr.c_str(), -1, SQLITE_TRANSIENT);  // Bind to the first placeholder
+    string param = "%" + str + "%";  // Add the wildcards to `str` for partial matching
+
+    exit = sqlite3_bind_text(stmt, 1, param.c_str(), -1, SQLITE_TRANSIENT);  // Bind to the first placeholder
     if (exit != SQLITE_OK) {
         sqlite3_finalize(stmt);
         return false;  // Return false on error
@@ -236,7 +238,9 @@ bool Credential::findCredential(const string& str, int &id) {
     while ((exit = sqlite3_step(stmt)) == SQLITE_ROW) {
         found = true;  // At least one record was found
 
-        id = sqlite3_column_int(stmt, 0);  // Assuming 'ID' is the first column
+        // Print record 
+        // NOTE: sqlite3_column_text is declared as const unsigned char*
+        id = sqlite3_column_int(stmt, 0); 
         const unsigned char* service = sqlite3_column_text(stmt, 1);
         const unsigned char* user = sqlite3_column_text(stmt, 2);
         const unsigned char* password = sqlite3_column_text(stmt, 3);
@@ -252,6 +256,8 @@ bool Credential::findCredential(const string& str, int &id) {
                   << ", Password: " << password 
                   << std::endl;
     }
+
+    // If multiple records are found, user will be prompted to enter a valid ID
     if(count > 1){
         cout << "Multiple credentials found under '" << str << "'\n";
         int selectedID;
