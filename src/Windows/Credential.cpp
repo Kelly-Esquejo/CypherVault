@@ -171,8 +171,40 @@ void Credential::setService(const string& newService) {
     service = newService;
 }
 
-void Credential::setUsername(const string& newUsername) {
-    username = newUsername;
+void Credential::setUsername(int id, const string& newUsername) {
+    sqlite3_stmt* stmt;
+    string query = "UPDATE CREDENTIALS SET USER = ? WHERE ID = ?";
+ 
+    // Prepare statement
+    if(sqlite3_prepare_v2(DB, query.c_str(), -1, &stmt, nullptr) != SQLITE_OK){
+        std::cerr << "\nError preparing statement: " << sqlite3_errmsg(DB) << std::endl;
+        return;
+    }
+  
+    // Bind the new password to the first placeholder
+    if (sqlite3_bind_text(stmt, 1, newUsername.c_str(), -1, SQLITE_TRANSIENT) != SQLITE_OK) {
+        cerr << "Error binding username: " << sqlite3_errmsg(DB) << endl;
+        sqlite3_finalize(stmt);
+        return;
+    }
+ 
+    // Bind the ID to the second placeholder
+    if (sqlite3_bind_int(stmt, 2, id) != SQLITE_OK) {
+        cerr << "Error binding ID: " << sqlite3_errmsg(DB) << endl;
+        sqlite3_finalize(stmt);
+        return;
+    }
+
+    // Execute the statement
+    int exit = sqlite3_step(stmt);
+    if (exit != SQLITE_DONE) {
+        std::cerr << "Error executing statement: " << sqlite3_errmsg(DB) << std::endl;
+    } else {
+        std::cout << "Username updated successfully!" << std::endl;
+    }
+   
+    // Finalize the statement
+    sqlite3_finalize(stmt);
 }
 
 void Credential::setPassword(int id, const string& newPassword) {
@@ -214,6 +246,13 @@ void Credential::setPassword(int id, const string& newPassword) {
 bool Credential::findCredential(const string& str, int &id) {
     sqlite3_stmt* stmt;
     string query = "SELECT * FROM CREDENTIALS WHERE SERVICE LIKE ?";  // Use a placeholder
+    // // Choice '1' or '2' for changing query 
+    // if(choice == 1){
+    //     // change username
+    //     string query = "SELECT * FROM CREDENTIALS WHERE SERVICE LIKE ?";  // Use a placeholder
+    // }else{
+    //     // change password
+    // }
     
     // Prepare the SQL statement
     int exit = sqlite3_prepare_v2(DB, query.c_str(), -1, &stmt, 0);
@@ -263,7 +302,7 @@ bool Credential::findCredential(const string& str, int &id) {
         int selectedID;
         bool valid = false;
         while(!valid){
-            cout << "Choose an ID: ";
+            cout << "\nChoose an ID: ";
             
             cin >> selectedID;
 
@@ -276,7 +315,7 @@ bool Credential::findCredential(const string& str, int &id) {
             }
 
             if(!valid){
-                cout << "Invalid ID. Choose a valid ID from the list: ";
+                cout << "Invalid ID. Choose a valid ID from the list: \n";
                 for(int id : ids) {
                     cout << id << "  ";
                 } 

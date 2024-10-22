@@ -33,7 +33,7 @@ class Credential{
         // Setter functions
         void setCredential(string, string, string);
         void setService(const string& newService);
-        void setUsername(const string& newUsername);
+        void setUsername(int id, const string& newUsername);
         void setPassword(int id, const string& newPassword);
         
         void createTable();

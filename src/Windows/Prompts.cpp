@@ -135,7 +135,6 @@ void Prompts::changePassword(string &password){
         }
     }
 
-
 	// get user input for password
 	cout << "New password: ";
 	cin >> password;
@@ -221,6 +220,12 @@ void Prompts::changeUsername(string &username){
         }
     }
 
+	// get user input for username
+	cout << "New username: ";
+	cin >> username;
+	
+	cout << "Updating username to '" << username << "'\n\n";
+	newCredential.setUsername(id, username);
 }
 
 /*
@@ -287,7 +292,7 @@ void Prompts::displayHelp(){
     cout << "|      that you do not delete an account|" << endl;
     cout << "|      by mistake.                      |" << endl;
     cout << "|                                       |" << endl;
-    cout << "| 3. Change Account                     |" << endl;
+    cout << "| 3. Change Username                    |" << endl;
     cout << "|    - Select this option to change the |" << endl;
     cout << "|      username or email associated with|" << endl;
     cout << "|      the current account. You will be |" << endl;
