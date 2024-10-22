@@ -2,6 +2,7 @@
 #include "prompts.h"
 #include <unistd.h>
 #include <conio.h> 
+#include <limits>
 
 using namespace std;
 string commonPasswords[]  = {"qwerty", "password", "abc123", "uiop"};
@@ -243,13 +244,24 @@ void Prompts::deleteAccount(string &){
 }
 
 int Prompts::menu(){
-	cout << "Enter: ";
 	int choice;
-	cin >> choice;
-	if(choice < 0 || choice > 6){
-		cout << "Invalid choice. 1-6 only.";
-	}
-	return choice;
+    while (true) {  // Loop until valid input is received
+        cout << "Enter: ";
+        cin >> choice;
+
+        if (cin.fail()) {
+            // If the input is not an integer
+            cin.clear();  // Clear the error flag
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard invalid input
+            cout << "Invalid input. Expecting a number between 1 and 7.\n";
+        } else if (choice < 1 || choice > 7) {
+            // Check if the input is outside the valid range
+            cout << "Invalid choice. Please enter a number between 1 and 7.\n";
+        } else {
+            // Valid input, break the loop and return the choice
+            return choice;
+        }
+    }
 }
 
 void Prompts::printMenu(){
