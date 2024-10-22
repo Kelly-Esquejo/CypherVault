@@ -171,25 +171,30 @@ void Credential::setService(const string& newService) {
     service = newService;
 }
 
-void Credential::setUsername(int id, const string& newUsername) {
+void Credential::binding(int choice, int id, const string& updateCell){
     sqlite3_stmt* stmt;
-    string query = "UPDATE CREDENTIALS SET USER = ? WHERE ID = ?";
- 
+    string query;
+    if(choice == 1){
+        query = "UPDATE CREDENTIALS SET USER = ? WHERE ID = ?";
+    }else{
+        query = "UPDATE CREDENTIALS SET PASSWORD = ? WHERE ID = ?";
+    }
+
     // Prepare statement
     if(sqlite3_prepare_v2(DB, query.c_str(), -1, &stmt, nullptr) != SQLITE_OK){
         std::cerr << "\nError preparing statement: " << sqlite3_errmsg(DB) << std::endl;
         return;
     }
-  
-    // Bind the new password to the first placeholder
-    if (sqlite3_bind_text(stmt, 1, newUsername.c_str(), -1, SQLITE_TRANSIENT) != SQLITE_OK) {
-        cerr << "Error binding username: " << sqlite3_errmsg(DB) << endl;
+
+    // Bind the new user/password to the first placeholder
+    if(sqlite3_bind_text(stmt, 1, updateCell.c_str(), -1, SQLITE_TRANSIENT) != SQLITE_OK){
+        cerr << "Error binding: " << sqlite3_errmsg(DB) << endl;
         sqlite3_finalize(stmt);
         return;
     }
- 
-    // Bind the ID to the second placeholder
-    if (sqlite3_bind_int(stmt, 2, id) != SQLITE_OK) {
+
+     // Bind the ID to the second placeholder
+    if(sqlite3_bind_int(stmt, 2, id) != SQLITE_OK){
         cerr << "Error binding ID: " << sqlite3_errmsg(DB) << endl;
         sqlite3_finalize(stmt);
         return;
@@ -197,50 +202,21 @@ void Credential::setUsername(int id, const string& newUsername) {
 
     // Execute the statement
     int exit = sqlite3_step(stmt);
-    if (exit != SQLITE_DONE) {
+    if(exit != SQLITE_DONE){
         std::cerr << "Error executing statement: " << sqlite3_errmsg(DB) << std::endl;
-    } else {
-        std::cout << "Username updated successfully!" << std::endl;
+    }else {
+        std::cout << "Record updated successfully!" << std::endl;
     }
    
     // Finalize the statement
     sqlite3_finalize(stmt);
 }
+void Credential::setUsername(int id, const string& newUsername) {
+    binding(1, id, newUsername);
+}
 
 void Credential::setPassword(int id, const string& newPassword) {
-    sqlite3_stmt* stmt;
-    string query = "UPDATE CREDENTIALS SET PASSWORD = ? WHERE ID = ?";
- 
-    // Prepare statement
-    if(sqlite3_prepare_v2(DB, query.c_str(), -1, &stmt, nullptr) != SQLITE_OK){
-        std::cerr << "\nError preparing statement: " << sqlite3_errmsg(DB) << std::endl;
-        return;
-    }
-  
-    // Bind the new password to the first placeholder
-    if (sqlite3_bind_text(stmt, 1, newPassword.c_str(), -1, SQLITE_TRANSIENT) != SQLITE_OK) {
-        cerr << "Error binding password: " << sqlite3_errmsg(DB) << endl;
-        sqlite3_finalize(stmt);
-        return;
-    }
- 
-    // Bind the ID to the second placeholder
-    if (sqlite3_bind_int(stmt, 2, id) != SQLITE_OK) {
-        cerr << "Error binding ID: " << sqlite3_errmsg(DB) << endl;
-        sqlite3_finalize(stmt);
-        return;
-    }
-
-    // Execute the statement
-    int exit = sqlite3_step(stmt);
-    if (exit != SQLITE_DONE) {
-        std::cerr << "Error executing statement: " << sqlite3_errmsg(DB) << std::endl;
-    } else {
-        std::cout << "Password updated successfully!" << std::endl;
-    }
-   
-    // Finalize the statement
-    sqlite3_finalize(stmt);
+    binding(2, id, newPassword);
 }
 
 bool Credential::findCredential(const string& str, int &id) {
