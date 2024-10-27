@@ -44,6 +44,7 @@ class Credential{
         void displayDatabase();
         void displayRecord();
         bool findCredential(const string &, int &id);
+        void binding(int choice, int id, const string&);
 };
 
 
