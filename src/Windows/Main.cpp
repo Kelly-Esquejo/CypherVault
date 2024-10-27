@@ -16,6 +16,7 @@ int main(int argc, char const *argv[]) {
 		main.cpp:13:11: warning: unknown escape sequence: '\040'
 	13 |   cout << "  ___|                |                \ \     /              |  |  " << endl;
 	*/
+
 	cout << R"(  ___|                |                \ \     /              |  |  )" << endl;
 	cout << R"( |      |   |  __ \   __ \    _ \   __| \ \   /  _` |  |   |  |  __|)" << endl;
 	cout << R"( |      |   |  |   |  | | |   __/  |     \ \ /  (   |  |   |  |  |  )" << endl;
@@ -23,13 +24,12 @@ int main(int argc, char const *argv[]) {
 	cout << R"(       ____/  _|                                                    )" << endl;
 	
 	cout << endl << endl << endl;
-	cout << "*****************************************" << endl;
-	cout << "|         Welcome to CypherVault        |" << endl;
-	cout << "*****************************************" << endl;
-	cout << "| CypherVault helps you create,         |" << endl;
-    cout << "| store, and manage your passwords      |" << endl;
-	cout << "| with ease.                            |" << endl;
-	cout << "*****************************************" << endl << endl;
+	cout << "********************************************************************" << endl;
+    cout << "|                      Welcome to Cypher Vault                     |" << endl;
+	cout << "********************************************************************" << endl;
+	cout << "|            Cypher Vault helps you create, store, and             |" << endl;
+    cout << "|                 manage your passwords with ease.                 |" << endl;
+	cout << "********************************************************************" << endl;
 	
 	Prompts prompt;
 	string service, username, password;

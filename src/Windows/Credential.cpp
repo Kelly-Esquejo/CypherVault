@@ -120,9 +120,10 @@ void Credential::deleteCredential(){
 */
 void Credential::displayDatabase(){
     string query = "SELECT * FROM CREDENTIALS;";
-    cout << "-----------------------------------------" << endl;
-    cout << "|            STATE OF TABLE             |" << endl;
-	cout << "-----------------------------------------" << endl;
+    cout << "********************************************************************" << endl;
+    cout << "|                           Cypher Vault                           |" << endl;
+    cout << "********************************************************************" << endl;
+
 
     sqlite3_exec(DB, query.c_str(), callback, NULL, NULL);
 }

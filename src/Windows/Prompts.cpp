@@ -20,9 +20,9 @@ enum IN {
 	Creates new account. 
 */
 void Prompts::newAccount (string &service, string &username, string &password){
-	cout  << endl << endl << "----------------------------------------" << endl;
-	cout << "|            Account Setup             |" << endl;
-	cout << "----------------------------------------" << endl;
+	cout << "\n\n********************************************************************" << endl;
+	cout << "|                          Account Setup                           |" << endl;
+	cout << "********************************************************************" << endl;
 	cout << "Enter service or type 'exit' to quit: ";
 	cin >> service;
 	if(service == "exit"){
@@ -111,10 +111,10 @@ bool Prompts::checkPasswordValidity(string &password){
 
 */
 void Prompts::changePassword(string &password){
-	cout << endl << endl << "-----------------------------------------" << endl;
-	cout << "|          Changing Password            |" << endl;
-	cout << "-----------------------------------------" << endl;
-	
+	cout << "\n\n********************************************************************" << endl;
+	cout << "|                         Changing Password                        |" << endl;
+	cout << "********************************************************************" << endl;
+
 	string service;
 	int id;
 	// Search for the service in the database
@@ -197,9 +197,10 @@ string Prompts::getPassword(){
 } 
 
 void Prompts::changeUsername(string &username){
-	cout << endl << endl << "-----------------------------------------" << endl;
-	cout << "|          Changing Username             |" << endl;
-	cout << "-----------------------------------------" << endl << endl;
+	cout << "\n\n********************************************************************" << endl;
+	cout << "|                         Changing Username                        |" << endl;
+	cout << "********************************************************************" << endl;
+
 
 	// TODO: get service 
 	string service;
@@ -235,11 +236,10 @@ void Prompts::changeUsername(string &username){
 */
 void Prompts::deleteAccount(string &){
 	cout << "Enter which account to delete: " << endl;
-	
 
-	cout << endl << endl << "-----------------------------------------" << endl;
-	cout << "|          Deleting Account              |" << endl;
-	cout << "-----------------------------------------" << endl;
+	cout << "\n\n********************************************************************" << endl;
+	cout << "|                         Deleting Account                         |" << endl;
+	cout << "********************************************************************" << endl;
 
 }
 
@@ -265,17 +265,17 @@ int Prompts::menu(){
 }
 
 void Prompts::printMenu(){
-	cout << "\n\n-----------------------------------------" << endl;
-	cout << "|                Menu                   |" << endl;
-	cout << "-----------------------------------------" << endl;
-	cout << "| 1. New Accounts                       |" << endl;
-	cout << "| 4. Delete Account                     |" << endl;
-	cout << "| 3. Change Account                     |" << endl;
-	cout << "| 4. Change Password                    |" << endl;
-	cout << "| 5. Help                               |" << endl;
-	cout << "| 6. Display credentials                |" << endl;
-	cout << "| 7. Exit                               |" << endl;
-	cout << "-----------------------------------------" << endl;
+	cout << "\n\n********************************************************************" << endl;
+	cout << "|                Menu                                              |" << endl;
+	cout << "********************************************************************" << endl;
+	cout << "| 1. New Accounts                                                  |" << endl;
+	cout << "| 4. Delete Account                                                |" << endl;
+	cout << "| 3. Change Account                                                |" << endl;
+	cout << "| 4. Change Password                                               |" << endl;
+	cout << "| 5. Help                                                          |" << endl;
+	cout << "| 6. Display credentials                                           |" << endl;
+	cout << "| 7. Exit                                                          |" << endl;
+	cout << "********************************************************************" << endl;
 }
 
 /*
@@ -288,48 +288,40 @@ void Prompts::printInformation(){
 
 
 void Prompts::displayHelp(){
-	cout << "\n\n-----------------------------------------" << endl;
-	cout << "|                Menu                   |" << endl;
-	cout << "-----------------------------------------" << endl;
-	cout << "| 1. New Accounts                       |" << endl;
-	cout << "|    - Select this option to create a   |" << endl;
-    cout << "|      new account. You will be asked   |" << endl;
-    cout << "|      to provide necessary details     |" << endl;
-    cout << "|      such as username and password.   |" << endl;
-	cout << "|                                       |" << endl;
-    cout << "| 2. Delete Account                     |" << endl;
-    cout << "|    - Select this option to delete an  |" << endl;
-    cout << "|      existing account. You will need  |" << endl;
-    cout << "|      to confirm your choice to ensure |" << endl;
-    cout << "|      that you do not delete an account|" << endl;
-    cout << "|      by mistake.                      |" << endl;
-    cout << "|                                       |" << endl;
-    cout << "| 3. Change Username                    |" << endl;
-    cout << "|    - Select this option to change the |" << endl;
-    cout << "|      username or email associated with|" << endl;
-    cout << "|      the current account. You will be |" << endl;
-    cout << "|      asked to provide the new         |" << endl;
-    cout << "|      username/email and confirm the   |" << endl;
-    cout << "|      change.                          |" << endl;
-    cout << "|                                       |" << endl;
-    cout << "| 4. Change Password                    |" << endl;
-    cout << "|    - Select this option to change the |" << endl;
-    cout << "|      password of the current account. |" << endl;
-    cout << "|      You will be asked to provide     |" << endl;
-    cout << "|      your current password and the new|" << endl;
-    cout << "|      password.                        |" << endl;
-    cout << "|                                       |" << endl;
-    cout << "| 5. Help                               |" << endl;
-    cout << "|    - Select this option to view this  |" << endl;
-    cout << "|      help menu, which provides        |" << endl;
-    cout << "|      information about the various    |" << endl;
-    cout << "|      options available in the main    |" << endl;
-    cout << "|      menu.                            |" << endl;
-    cout << "| 6. Display Credentials                |" << endl;
-    cout << "| 7. Exit                               |" << endl;
-    cout << "|    - Select this option to exit the   |" << endl;
-    cout << "|      application.                     |" << endl;
-    cout << "-----------------------------------------" << endl;
+	cout << "\n\n********************************************************************" << endl;
+	 cout << "|                               Menu                              |" << endl;
+	cout << "********************************************************************" << endl;
+	cout << "| 1. New Accounts                                                  |" << endl;
+	cout << "|    - Select this option to create a new account.                 |" << endl;
+    cout << "|      You will be asked to provide necessary details              |" << endl;
+    cout << "|      such as username and password.                              |" << endl;
+    cout << "|                                                                  |" << endl;
+    cout << "| 2. Delete Account                                                |" << endl;
+    cout << "|    - Select this option to delete an existing account.           |" << endl;
+    cout << "|      You will need to confirm your choice to ensure that         |" << endl;
+    cout << "|      you do not delete an account by mistake.                    |" << endl;
+    cout << "|                                                                  |" << endl;
+    cout << "| 3. Change Username                                               |" << endl;
+    cout << "|    - Select this option to change the username or email          |" << endl;
+    cout << "|      associated with the current account. You will be            |" << endl;
+    cout << "|      asked to provide the new username/email                     |" << endl;
+    cout << "|      and confirm the change.                                     |" << endl;
+    cout << "|                                                                  |" << endl;
+    cout << "| 4. Change Password                                               |" << endl;
+    cout << "|    - Select this option to change the password of the            |" << endl;
+    cout << "|      current account. You will be asked to provide               |" << endl;
+    cout << "|      your current password and the new password.                 |" << endl;
+    cout << "|                                                                  |" << endl;
+    cout << "| 5. Help                                                          |" << endl;
+    cout << "|    - Select this option to view this help menu, which            |" << endl;
+    cout << "|      provides information about the various options              |" << endl;
+    cout << "|      available in the main menu.                                 |" << endl;
+	cout << "|                                                                  |" << endl;
+    cout << "| 6. Display Credentials                                           |" << endl;
+    cout << "|                                                                  |" << endl;
+	cout << "| 7. Exit                                                          |" << endl;
+    cout << "|    - Select this option to exit the application.                 |" << endl;
+    cout << "********************************************************************" << endl;
 }
 //**********************************************************************
 
