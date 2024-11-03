@@ -266,7 +266,7 @@ int Prompts::menu(){
 
 void Prompts::printMenu(){
 	cout << "\n\n********************************************************************" << endl;
-	cout << "|                Menu                                              |" << endl;
+	cout << "|                               Menu                               |" << endl;
 	cout << "********************************************************************" << endl;
 	cout << "| 1. New Accounts                                                  |" << endl;
 	cout << "| 4. Delete Account                                                |" << endl;
@@ -289,7 +289,7 @@ void Prompts::printInformation(){
 
 void Prompts::displayHelp(){
 	cout << "\n\n********************************************************************" << endl;
-	 cout << "|                               Menu                              |" << endl;
+	cout << "|                               Menu                               |" << endl;
 	cout << "********************************************************************" << endl;
 	cout << "| 1. New Accounts                                                  |" << endl;
 	cout << "|    - Select this option to create a new account.                 |" << endl;
