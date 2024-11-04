@@ -25,7 +25,7 @@ class Credential{
         Credential(string, string, string);
         ~Credential();
 
-         // Getter functions
+        // Getter functions
         string getService() const;
         string getUsername() const;
         string getPassword() const;
@@ -37,12 +37,13 @@ class Credential{
         void setPassword(int id, const string& newPassword);
         
         void createTable();
-        void insertCredential(string service, string username, string password);
-        void deleteCredential();
         void closeDatabase();
 
+        void insertCredential(string service, string username, string password);
+        void deleteCredential(int id);
+        
         void displayDatabase();
-        void displayRecord();
+    
         bool findCredential(const string &, int &id);
         void binding(int choice, int id, const string&);
 };

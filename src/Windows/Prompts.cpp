@@ -202,7 +202,7 @@ void Prompts::changeUsername(string &username){
 	cout << "********************************************************************" << endl;
 
 
-	// TODO: get service 
+	// Get service 
 	string service;
 	int id;
 	while (true) {
@@ -222,7 +222,7 @@ void Prompts::changeUsername(string &username){
         }
     }
 
-	// get user input for username
+	// Get username
 	cout << "New username: ";
 	cin >> username;
 	
@@ -235,14 +235,40 @@ void Prompts::changeUsername(string &username){
 
 */
 void Prompts::deleteAccount(string &){
-	cout << "Enter which account to delete: " << endl;
-
 	cout << "\n\n********************************************************************" << endl;
 	cout << "|                         Deleting Account                         |" << endl;
 	cout << "********************************************************************" << endl;
 
+	// Get service 
+	string service;
+	int id;
+	while(true) {
+		cout << "Enter service to delete account for (or 'exit' to cancel): ";
+		cin >> service;
+
+		if (service == "exit") {
+            cout << "Deleting account canceled.\n";
+            return;
+        }
+
+		// Check if the service exists
+        if (newCredential.findCredential(service, id)) {
+            break;  // Exit loop if service is found
+        } else {
+            cout << "Service not found. Please try again.\n";
+        }
+	}
+
+	// Delete chosen account
+	cout << "Deleting account ID: " << id;
+	newCredential.deleteCredential(id);
 }
 
+
+
+/*
+	Menu for Cypher Vault. Input allowed are between 1-7. Otherwise, re-prompt.
+*/
 int Prompts::menu(){
 	int choice;
     while (true) {  // Loop until valid input is received
@@ -269,7 +295,7 @@ void Prompts::printMenu(){
 	cout << "|                               Menu                               |" << endl;
 	cout << "********************************************************************" << endl;
 	cout << "| 1. New Accounts                                                  |" << endl;
-	cout << "| 4. Delete Account                                                |" << endl;
+	cout << "| 2. Delete Account                                                |" << endl;
 	cout << "| 3. Change Account                                                |" << endl;
 	cout << "| 4. Change Password                                               |" << endl;
 	cout << "| 5. Help                                                          |" << endl;

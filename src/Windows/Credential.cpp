@@ -103,16 +103,32 @@ void Credential::insertCredential(string service, string username, string passwo
 	// }
 }
 
-void Credential::deleteCredential(){
-    string query = "DELETE FROM CREDENTIALS WHERE ID = 2;" ;
-	int exit = sqlite3_exec(DB, query.c_str(), NULL, 0, &errMessage);
+void Credential::deleteCredential(int id){
+    sqlite3_stmt* stmt;
+    string query = "DELETE FROM CREDENTIALS WHERE ID = ?" ;
 
-	if(exit != SQLITE_OK){
-		cerr << "Error DELETE" << endl;
-		sqlite3_free(errMessage);
-	}else{
-		cout << "\n Record deleted Successfully!" << endl;
-	}
+    // Prepare the SQL statement
+    int exit = sqlite3_prepare_v2(DB, query.c_str(), -1, &stmt, 0);
+    if (exit != SQLITE_OK) {
+        return;
+    }
+
+     // Bind the ID to the second placeholder
+    if(sqlite3_bind_int(stmt, 1, id) != SQLITE_OK){
+        cerr << "Error binding ID: " << sqlite3_errmsg(DB) << endl;
+        sqlite3_finalize(stmt);
+        return;
+    }
+
+    // Execute the statement
+    if(sqlite3_step(stmt) != SQLITE_DONE){
+        std::cerr << "Error executing DELETE statement: " << sqlite3_errmsg(DB) << std::endl;
+    } else {
+        std::cout << "\nRecord deleted successfully!" << std::endl;
+    }
+
+    // Finalize the statement
+    sqlite3_finalize(stmt);
 }
 
 /*
@@ -120,16 +136,11 @@ void Credential::deleteCredential(){
 */
 void Credential::displayDatabase(){
     string query = "SELECT * FROM CREDENTIALS;";
-    cout << "********************************************************************" << endl;
+    cout << "\n\n********************************************************************" << endl;
     cout << "|                           Cypher Vault                           |" << endl;
     cout << "********************************************************************" << endl;
 
-
     sqlite3_exec(DB, query.c_str(), callback, NULL, NULL);
-}
-
-void Credential::displayRecord(){
-
 }
 
 
@@ -172,6 +183,20 @@ void Credential::setService(const string& newService) {
     service = newService;
 }
 
+/*
+    Calls binding(choice, id, newUsername) to change the username
+*/
+void Credential::setUsername(int id, const string& newUsername) {
+    binding(1, id, newUsername);
+}
+
+/*
+    Calls binding(choice, id, newPassword) to change the password
+*/
+void Credential::setPassword(int id, const string& newPassword) {
+    binding(2, id, newPassword);
+}
+
 void Credential::binding(int choice, int id, const string& updateCell){
     sqlite3_stmt* stmt;
     string query;
@@ -211,13 +236,6 @@ void Credential::binding(int choice, int id, const string& updateCell){
    
     // Finalize the statement
     sqlite3_finalize(stmt);
-}
-void Credential::setUsername(int id, const string& newUsername) {
-    binding(1, id, newUsername);
-}
-
-void Credential::setPassword(int id, const string& newPassword) {
-    binding(2, id, newPassword);
 }
 
 bool Credential::findCredential(const string& str, int &id) {
