@@ -10,11 +10,7 @@ using namespace std;
 
 class Credential{
     private:
-        
-        string service;
-        string username;
-        string password;
-
+    
         sqlite3* DB;
 	
 	    char *errMessage;
@@ -22,30 +18,22 @@ class Credential{
         static int callback(void *data, int argc, char** argv, char** azColName);
     public:
         Credential();
-        Credential(string, string, string);
         ~Credential();
 
-        // Getter functions
-        string getService() const;
-        string getUsername() const;
-        string getPassword() const;
-
         // Setter functions
-        void setCredential(string, string, string);
-        void setService(const string& newService);
-        void setUsername(int id, const string& newUsername);
-        void setPassword(int id, const string& newPassword);
+        void setUsername(string service, string user, const string& newUsername);
+        void setPassword(string service, string user, const string& newPassword);
         
         void createTable();
         void closeDatabase();
 
         void insertCredential(string service, string username, string password);
-        void deleteCredential(int id);
+        void deleteCredential(string , string);
         
         void displayDatabase();
     
-        bool findCredential(const string &, int &id);
-        void binding(int choice, int id, const string&);
+        bool findCredential(const string &, string &);
+        void binding(int choice, string service, const string&);
 };
 
 

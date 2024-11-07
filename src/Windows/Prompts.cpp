@@ -116,7 +116,7 @@ void Prompts::changePassword(string &password){
 	cout << "********************************************************************" << endl;
 
 	string service;
-	int id;
+	string user;
 	// Search for the service in the database
 	// Prompt user for a valid service, with an option to exit
     while (true) {
@@ -129,7 +129,7 @@ void Prompts::changePassword(string &password){
         }
 
         // Check if the service exists
-        if (newCredential.findCredential(service, id)) {
+        if (newCredential.findCredential(service, user)) {
             break;  // Exit loop if service is found
         } else {
             cout << "Service not found. Please try again.\n";
@@ -153,7 +153,7 @@ void Prompts::changePassword(string &password){
 	}
 	showPassword(password);
 	cout << "Updating password.\n\n";
-	newCredential.setPassword(id, password);
+	newCredential.setPassword(service, user, password);
 }
 
 /*
@@ -204,7 +204,7 @@ void Prompts::changeUsername(string &username){
 
 	// Get service 
 	string service;
-	int id;
+	string user;
 	while (true) {
         cout << "Enter service to change username for (or 'exit' to cancel): ";
         cin >> service;
@@ -215,7 +215,7 @@ void Prompts::changeUsername(string &username){
         }
 
         // Check if the service exists
-        if (newCredential.findCredential(service, id)) {
+        if (newCredential.findCredential(service, user)) {
             break;  // Exit loop if service is found
         } else {
             cout << "Service not found. Please try again.\n";
@@ -227,21 +227,21 @@ void Prompts::changeUsername(string &username){
 	cin >> username;
 	
 	cout << "Updating username to '" << username << "'\n\n";
-	newCredential.setUsername(id, username);
+	newCredential.setUsername(service, user, username);
 }
 
 /*
 	Prompts user for -__ to use in the query of deleteCredential();
 
 */
-void Prompts::deleteAccount(string &){
+void Prompts::deleteAccount(){
 	cout << "\n\n********************************************************************" << endl;
 	cout << "|                         Deleting Account                         |" << endl;
 	cout << "********************************************************************" << endl;
 
 	// Get service 
 	string service;
-	int id;
+	string user;
 	while(true) {
 		cout << "Enter service to delete account for (or 'exit' to cancel): ";
 		cin >> service;
@@ -252,7 +252,7 @@ void Prompts::deleteAccount(string &){
         }
 
 		// Check if the service exists
-        if (newCredential.findCredential(service, id)) {
+        if (newCredential.findCredential(service, user)) {
             break;  // Exit loop if service is found
         } else {
             cout << "Service not found. Please try again.\n";
@@ -260,11 +260,9 @@ void Prompts::deleteAccount(string &){
 	}
 
 	// Delete chosen account
-	cout << "Deleting account ID: " << id;
-	newCredential.deleteCredential(id);
+	cout << "Deleting account: service: " << service << " user: " << user;
+	newCredential.deleteCredential(service, user);
 }
-
-
 
 /*
 	Menu for Cypher Vault. Input allowed are between 1-7. Otherwise, re-prompt.

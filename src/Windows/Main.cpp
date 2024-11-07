@@ -48,7 +48,7 @@ int main(int argc, char const *argv[]) {
 				prompt.newAccount(service, username, password);
 				break;
 			case 2:
-				prompt.deleteAccount(service);
+				prompt.deleteAccount();
 				break;
 			case 3:
 				prompt.changeUsername(username);

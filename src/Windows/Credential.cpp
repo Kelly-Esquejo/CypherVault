@@ -32,7 +32,6 @@ void Credential::createTable(){
 
     // Create the table
     string query = "CREATE TABLE CREDENTIALS("
-                    "ID         INTEGER  PRIMARY KEY, "
                     "SERVICE     TEXT    NOT NULL, "
                     "USER        TEXT    NOT NULL, "
                     "PASSWORD    TEXT    NOT NULL);";
@@ -103,24 +102,31 @@ void Credential::insertCredential(string service, string username, string passwo
 	// }
 }
 
-void Credential::deleteCredential(int id){
+void Credential::deleteCredential(string service, string user){
     sqlite3_stmt* stmt;
-    string query = "DELETE FROM CREDENTIALS WHERE ID = ?" ;
+    string query = "DELETE FROM CREDENTIALS WHERE service = ? AND user = ?" ;
 
-    // Prepare the SQL statement
-    int exit = sqlite3_prepare_v2(DB, query.c_str(), -1, &stmt, 0);
-    if (exit != SQLITE_OK) {
+    // Prepare statement
+    if(sqlite3_prepare_v2(DB, query.c_str(), -1, &stmt, nullptr) != SQLITE_OK){
+        std::cerr << "\nError preparing statement: " << sqlite3_errmsg(DB) << std::endl;
         return;
     }
 
-     // Bind the ID to the second placeholder
-    if(sqlite3_bind_int(stmt, 1, id) != SQLITE_OK){
-        cerr << "Error binding ID: " << sqlite3_errmsg(DB) << endl;
+    // Bind the new user/password to the first placeholder
+    if(sqlite3_bind_text(stmt, 1, service.c_str(), -1, SQLITE_TRANSIENT) != SQLITE_OK){
+        cerr << "Error binding service: " << sqlite3_errmsg(DB) << endl;
         sqlite3_finalize(stmt);
         return;
     }
 
-    // Execute the statement
+    // Bind the user to the second placeholder
+    if(sqlite3_bind_text(stmt, 2, user.c_str(), -1, SQLITE_TRANSIENT) != SQLITE_OK){
+        cerr << "Error binding user: " << sqlite3_errmsg(DB) << endl;
+        sqlite3_finalize(stmt);
+        return;
+    }
+
+    // Execute the statement 
     if(sqlite3_step(stmt) != SQLITE_DONE){
         std::cerr << "Error executing DELETE statement: " << sqlite3_errmsg(DB) << std::endl;
     } else {
@@ -129,6 +135,16 @@ void Credential::deleteCredential(int id){
 
     // Finalize the statement
     sqlite3_finalize(stmt);
+
+    // Run the VACUUM command
+    char* errMsg = nullptr;
+    int exit = sqlite3_exec(DB, "VACUUM;", nullptr, nullptr, &errMsg);
+    if (exit != SQLITE_OK) {
+        std::cerr << "SQL error: " << errMsg << std::endl;
+        sqlite3_free(errMsg);
+    } else {
+        std::cout << "Database compacted successfully." << std::endl;
+    }
 }
 
 /*
@@ -143,67 +159,34 @@ void Credential::displayDatabase(){
     sqlite3_exec(DB, query.c_str(), callback, NULL, NULL);
 }
 
-
 Credential::Credential(){
    createTable();
-}
-
-Credential::Credential(string x, string y, string z) {
-    
-    service = x;
-    username = y;
-    password = z;
 }
 
 // Destructor definition
 Credential::~Credential() {}
 
-// Getter function definitions
-string Credential::getService() const {
-    return service;
-}
-
-string Credential::getUsername() const {
-    return username;
-}
-
-string Credential::getPassword() const {
-    return password;
-}
-
-// Setter function definitions
-
-void Credential::setCredential(string x, string y, string z){
-    service = x;
-    username = y;
-    password = z;
-}
-
-void Credential::setService(const string& newService) {
-    service = newService;
+/*
+    Calls binding(choice, service, newUsername) to change the username
+*/
+void Credential::setUsername(string service, string user, const string& newUsername) {
+   // binding(1, service, user, newUsername);
 }
 
 /*
-    Calls binding(choice, id, newUsername) to change the username
+    Calls binding(choice, service, newPassword) to change the password
 */
-void Credential::setUsername(int id, const string& newUsername) {
-    binding(1, id, newUsername);
+void Credential::setPassword(string service, string user, const string& newPassword) {
+  //  binding(2, service, user, newPassword);
 }
 
-/*
-    Calls binding(choice, id, newPassword) to change the password
-*/
-void Credential::setPassword(int id, const string& newPassword) {
-    binding(2, id, newPassword);
-}
-
-void Credential::binding(int choice, int id, const string& updateCell){
+void Credential::binding(int choice, string service, const string& updateCell){
     sqlite3_stmt* stmt;
     string query;
     if(choice == 1){
-        query = "UPDATE CREDENTIALS SET USER = ? WHERE ID = ?";
+        query = "UPDATE CREDENTIALS SET USER = ? WHERE SERVICE = ?";
     }else{
-        query = "UPDATE CREDENTIALS SET PASSWORD = ? WHERE ID = ?";
+        query = "UPDATE CREDENTIALS SET PASSWORD = ? WHERE SERVICE = ?";
     }
 
     // Prepare statement
@@ -219,9 +202,9 @@ void Credential::binding(int choice, int id, const string& updateCell){
         return;
     }
 
-     // Bind the ID to the second placeholder
-    if(sqlite3_bind_int(stmt, 2, id) != SQLITE_OK){
-        cerr << "Error binding ID: " << sqlite3_errmsg(DB) << endl;
+     // Bind the service to the second placeholder
+    if(sqlite3_bind_text(stmt, 2, service.c_str(), -1, SQLITE_TRANSIENT) != SQLITE_OK){
+        cerr << "Error binding SERVICE: " << sqlite3_errmsg(DB) << endl;
         sqlite3_finalize(stmt);
         return;
     }
@@ -238,7 +221,94 @@ void Credential::binding(int choice, int id, const string& updateCell){
     sqlite3_finalize(stmt);
 }
 
-bool Credential::findCredential(const string& str, int &id) {
+// bool Credential::findCredential(const string& str, int &id) {
+//     sqlite3_stmt* stmt;
+//     string query = "SELECT * FROM CREDENTIALS WHERE SERVICE LIKE ?";  // Use a placeholder
+//     // // Choice '1' or '2' for changing query 
+//     // if(choice == 1){
+//     //     // change username
+//     //     string query = "SELECT * FROM CREDENTIALS WHERE SERVICE LIKE ?";  // Use a placeholder
+//     // }else{
+//     //     // change password
+//     // }
+    
+//     // Prepare the SQL statement
+//     int exit = sqlite3_prepare_v2(DB, query.c_str(), -1, &stmt, 0);
+//     if (exit != SQLITE_OK) {
+//         return false;  // Return false on error
+//     }
+
+//     // To avoid SQL injections
+//     // Bind the `str` parameter to the placeholder with wildcards for partial matching
+//     string param = "%" + str + "%";  // Add the wildcards to `str` for partial matching
+
+//     exit = sqlite3_bind_text(stmt, 1, param.c_str(), -1, SQLITE_TRANSIENT);  // Bind to the first placeholder
+//     if (exit != SQLITE_OK) {
+//         sqlite3_finalize(stmt);
+//         return false;  // Return false on error
+//     }
+
+//     // Execute the statement and check for results
+//     vector<int> ids;
+//     bool found = false;
+//     int count = 0;
+//     while ((exit = sqlite3_step(stmt)) == SQLITE_ROW) {
+//         found = true;  // At least one record was found
+
+//         // Print record 
+//         // NOTE: sqlite3_column_text is declared as const unsigned char*
+//         id = sqlite3_column_int(stmt, 0); 
+//         const unsigned char* service = sqlite3_column_text(stmt, 1);
+//         const unsigned char* user = sqlite3_column_text(stmt, 2);
+//         const unsigned char* password = sqlite3_column_text(stmt, 3);
+
+//         // Store id to the vector and increment count
+//         ids.push_back(id);
+//         count++;
+
+//         // Process or print the found record as needed
+//         std::cout << "ID: " << id 
+//                   << ", Service: " << service 
+//                   << ", User: " << user 
+//                   << ", Password: " << password 
+//                   << std::endl;
+//     }
+
+//     // If multiple records are found, user will be prompted to enter a valid ID
+//     if(count > 1){
+//         cout << "Multiple credentials found under '" << str << "'\n";
+//         string selectedID;
+//         bool valid = false;
+//         while(!valid){
+//             cout << "\nChoose a service: ";
+            
+//             cin >> selectedID;
+
+//             // Check if selected ID is valid
+//             for(int id : ids){
+//                 if(id == selectedID){
+//                     valid = true;
+//                     break;
+//                 }
+//             }
+
+//             if(!valid){
+//                 cout << "Invalid ID. Choose a valid ID from the list: \n";
+//                 for(int id : ids) {
+//                     cout << id << "  ";
+//                 } 
+//             }
+//         }
+//         id = selectedID;
+//     }
+//     // Finalize the statement
+//     sqlite3_finalize(stmt);
+    
+//     return found;  // Return true if found, otherwise false
+// }
+
+
+bool Credential::findCredential(const string& str, string &serviceSelected) {
     sqlite3_stmt* stmt;
     string query = "SELECT * FROM CREDENTIALS WHERE SERVICE LIKE ?";  // Use a placeholder
     // // Choice '1' or '2' for changing query 
@@ -266,7 +336,7 @@ bool Credential::findCredential(const string& str, int &id) {
     }
 
     // Execute the statement and check for results
-    vector<int> ids;
+    vector<string> services;
     bool found = false;
     int count = 0;
     while ((exit = sqlite3_step(stmt)) == SQLITE_ROW) {
@@ -274,18 +344,17 @@ bool Credential::findCredential(const string& str, int &id) {
 
         // Print record 
         // NOTE: sqlite3_column_text is declared as const unsigned char*
-        id = sqlite3_column_int(stmt, 0); 
+        serviceSelected = sqlite3_column_int(stmt, 0); 
         const unsigned char* service = sqlite3_column_text(stmt, 1);
         const unsigned char* user = sqlite3_column_text(stmt, 2);
         const unsigned char* password = sqlite3_column_text(stmt, 3);
 
         // Store id to the vector and increment count
-        ids.push_back(id);
+        services.push_back(serviceSelected);
         count++;
 
         // Process or print the found record as needed
-        std::cout << "ID: " << id 
-                  << ", Service: " << service 
+        std::cout << ", Service: " << serviceSelected 
                   << ", User: " << user 
                   << ", Password: " << password 
                   << std::endl;
@@ -294,33 +363,33 @@ bool Credential::findCredential(const string& str, int &id) {
     // If multiple records are found, user will be prompted to enter a valid ID
     if(count > 1){
         cout << "Multiple credentials found under '" << str << "'\n";
-        int selectedID;
+        string choice;
         bool valid = false;
         while(!valid){
-            cout << "\nChoose an ID: ";
+            cout << "\nChoose a service: ";
             
-            cin >> selectedID;
+            cin >> choice;
 
-            // Check if selected ID is valid
-            for(int id : ids){
-                if(id == selectedID){
+            // Check if selected service is valid
+            for(string index : services){
+                if(index == choice){
                     valid = true;
                     break;
                 }
             }
 
             if(!valid){
-                cout << "Invalid ID. Choose a valid ID from the list: \n";
-                for(int id : ids) {
-                    cout << id << "  ";
+                cout << "Invalid service. Choose a valid service from the list: \n";
+                for(string index : services){
+                    cout << index << "  ";
                 } 
             }
-
         }
-        id = selectedID;
+        serviceSelected = choice;
     }
     // Finalize the statement
     sqlite3_finalize(stmt);
     
     return found;  // Return true if found, otherwise false
 }
+
