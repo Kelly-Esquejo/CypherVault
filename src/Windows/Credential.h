@@ -21,8 +21,8 @@ class Credential{
         ~Credential();
 
         // Setter functions
-        void setUsername(string service, string user, const string& newUsername);
-        void setPassword(string service, string user, const string& newPassword);
+        void setUsername(string service, string user, const string&);
+        void setPassword(string service, string user, const string&);
         
         void createTable();
         void closeDatabase();
@@ -32,8 +32,8 @@ class Credential{
         
         void displayDatabase();
     
-        bool findCredential(const string &, string &);
-        void binding(int choice, string service, const string&);
+        bool findCredential(string &, string &);
+        void binding(int choice, string, string, const string&);
 };
 
 

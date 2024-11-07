@@ -215,6 +215,7 @@ void Prompts::changeUsername(string &username){
         }
 
         // Check if the service exists
+		// If exist, prompts user to choose which specific user
         if (newCredential.findCredential(service, user)) {
             break;  // Exit loop if service is found
         } else {
@@ -226,7 +227,7 @@ void Prompts::changeUsername(string &username){
 	cout << "New username: ";
 	cin >> username;
 	
-	cout << "Updating username to '" << username << "'\n\n";
+	cout << "Updating username from '" << user << "' to '" << username << "'\n\n";
 	newCredential.setUsername(service, user, username);
 }
 
