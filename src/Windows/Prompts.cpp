@@ -195,7 +195,7 @@ string Prompts::getPassword(){
 		cout << sp; 
 	} 
 } 
-
+// Only letters and numbers can be used; no special characters, spaces nor symbols
 void Prompts::changeUsername(string &username){
 	cout << "\n\n********************************************************************" << endl;
 	cout << "|                         Changing Username                        |" << endl;

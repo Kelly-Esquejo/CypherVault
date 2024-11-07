@@ -224,14 +224,7 @@ void Credential::binding(int choice, string service, const string& updateCell){
 // bool Credential::findCredential(const string& str, int &id) {
 //     sqlite3_stmt* stmt;
 //     string query = "SELECT * FROM CREDENTIALS WHERE SERVICE LIKE ?";  // Use a placeholder
-//     // // Choice '1' or '2' for changing query 
-//     // if(choice == 1){
-//     //     // change username
-//     //     string query = "SELECT * FROM CREDENTIALS WHERE SERVICE LIKE ?";  // Use a placeholder
-//     // }else{
-//     //     // change password
-//     // }
-    
+
 //     // Prepare the SQL statement
 //     int exit = sqlite3_prepare_v2(DB, query.c_str(), -1, &stmt, 0);
 //     if (exit != SQLITE_OK) {
@@ -242,7 +235,8 @@ void Credential::binding(int choice, string service, const string& updateCell){
 //     // Bind the `str` parameter to the placeholder with wildcards for partial matching
 //     string param = "%" + str + "%";  // Add the wildcards to `str` for partial matching
 
-//     exit = sqlite3_bind_text(stmt, 1, param.c_str(), -1, SQLITE_TRANSIENT);  // Bind to the first placeholder
+//     // Bind to the first placeholder
+//     exit = sqlite3_bind_text(stmt, 1, param.c_str(), -1, SQLITE_TRANSIENT);  
 //     if (exit != SQLITE_OK) {
 //         sqlite3_finalize(stmt);
 //         return false;  // Return false on error
@@ -308,17 +302,10 @@ void Credential::binding(int choice, string service, const string& updateCell){
 // }
 
 
-bool Credential::findCredential(const string& str, string &serviceSelected) {
+bool Credential::findCredential(const string& str, string &userSelected) {
     sqlite3_stmt* stmt;
     string query = "SELECT * FROM CREDENTIALS WHERE SERVICE LIKE ?";  // Use a placeholder
-    // // Choice '1' or '2' for changing query 
-    // if(choice == 1){
-    //     // change username
-    //     string query = "SELECT * FROM CREDENTIALS WHERE SERVICE LIKE ?";  // Use a placeholder
-    // }else{
-    //     // change password
-    // }
-    
+
     // Prepare the SQL statement
     int exit = sqlite3_prepare_v2(DB, query.c_str(), -1, &stmt, 0);
     if (exit != SQLITE_OK) {
@@ -336,7 +323,7 @@ bool Credential::findCredential(const string& str, string &serviceSelected) {
     }
 
     // Execute the statement and check for results
-    vector<string> services;
+    vector<string> foundServices;
     bool found = false;
     int count = 0;
     while ((exit = sqlite3_step(stmt)) == SQLITE_ROW) {
@@ -344,17 +331,17 @@ bool Credential::findCredential(const string& str, string &serviceSelected) {
 
         // Print record 
         // NOTE: sqlite3_column_text is declared as const unsigned char*
-        serviceSelected = sqlite3_column_int(stmt, 0); 
-        const unsigned char* service = sqlite3_column_text(stmt, 1);
-        const unsigned char* user = sqlite3_column_text(stmt, 2);
-        const unsigned char* password = sqlite3_column_text(stmt, 3);
+        const unsigned char* service = sqlite3_column_text(stmt, 0); 
+        // const unsigned char* service = sqlite3_column_text(stmt, 1);
+        const unsigned char* user = sqlite3_column_text(stmt, 1);
+        const unsigned char* password = sqlite3_column_text(stmt, 2);
 
         // Store id to the vector and increment count
-        services.push_back(serviceSelected);
+        foundServices.push_back(string(reinterpret_cast<const char*>(user)));
         count++;
 
         // Process or print the found record as needed
-        std::cout << ", Service: " << serviceSelected 
+        std::cout << "Service: " << service 
                   << ", User: " << user 
                   << ", Password: " << password 
                   << std::endl;
@@ -366,12 +353,12 @@ bool Credential::findCredential(const string& str, string &serviceSelected) {
         string choice;
         bool valid = false;
         while(!valid){
-            cout << "\nChoose a service: ";
+            cout << "\nChoose a user/e-mail: ";
             
             cin >> choice;
 
             // Check if selected service is valid
-            for(string index : services){
+            for(string index : foundServices){
                 if(index == choice){
                     valid = true;
                     break;
@@ -380,12 +367,12 @@ bool Credential::findCredential(const string& str, string &serviceSelected) {
 
             if(!valid){
                 cout << "Invalid service. Choose a valid service from the list: \n";
-                for(string index : services){
+                for(string index : foundServices){
                     cout << index << "  ";
                 } 
             }
         }
-        serviceSelected = choice;
+        userSelected = choice;
     }
     // Finalize the statement
     sqlite3_finalize(stmt);
