@@ -30,7 +30,7 @@ void Prompts::newAccount (string &service, string &username, string &password){
 	}
 	cout << "Enter email or username for " << service << ": ";
 	cin >> username;
-	cout << "Enter password for " << username << " for " << service << ": ";
+	cout << "Enter password: ";
 
 	password = getPassword();
 
@@ -38,8 +38,7 @@ void Prompts::newAccount (string &service, string &username, string &password){
 	bool isValid = true;
 	while(!checkPasswordValidity(password)){
 		cout << "Invalid password. Please try again.\n";
-		cout << "Enter password for " << username << " for " << service << ": ";
-		cout << "or 'exit' to quit: " ;
+		cout << "Enter password or 'exit' to quit: " ;
 		password = getPassword();
 		if(password == "exit"){
 			return;
@@ -71,8 +70,7 @@ void Prompts::showPassword(string &password){
 // Checks the validity of a password
 bool Prompts::checkPasswordValidity(string &password){
 	if(password.length() < 12){
-		cout << "Password length needs to be at least 12 characters.\n\n" ;
-
+		cout << "\n\nPassword length needs to be at least 12 characters.\n\n" ;
 		return false;
 	}
 
@@ -87,19 +85,21 @@ bool Prompts::checkPasswordValidity(string &password){
 		else if (ispunct(ch)) hasSpecial = true;
 	}
 
+	cout << "\n\n";
 	if(!hasUpper){
-		cout << "Password is missing an uppercase letter. \n\n";
+		cout << "Password is missing an uppercase letter. \n";
 	}
 	if(!hasLower){
-		cout << "Password is missing a lowercase letter. \n\n";
+		cout << "Password is missing a lowercase letter. \n";
 	}
 	if(!hasDigit){
-		cout << "Password is missing a number. \n\n";
+		cout << "Password is missing a number. \n";
 	}
 	if(!hasSpecial){
-		cout << "Password is missing a special character. \n\n";
+		cout << "Password is missing a special character. \n";
 	}
 
+	cout << "\n\n";
 	// check if common password
 
 	// check history
