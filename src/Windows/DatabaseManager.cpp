@@ -1,21 +1,21 @@
-#include "credential.h"
+#include "databaseManager.h"
 #include <unordered_map>
 
 using namespace std;
 
-int Credential::callback(void *data, int argc, char** argv, char** azColName){
+int DatabaseManager::callback(void *data, int argc, char** argv, char** azColName){
 	int i;
 	cerr << static_cast<const char*> (data);
 	for(int i = 0; i < argc; i++) {
-    	std::cout << azColName[i] << " = " << (argv[i] ? argv[i] : "NULL") << std::endl;
-  	}
+        std::cout << azColName[i] << " = " << (argv[i] ? argv[i] : "NULL") << std::endl;
+    }
 
 	cout << endl;
 	return 0;
 }
 
 
-void Credential::createTable(){
+void DatabaseManager::createTable(){
     /* sqlite3_open:
     This routine opens a connection to an SQLite database file 
     and returns a database connection object.
@@ -53,7 +53,7 @@ void Credential::createTable(){
 // Close the connection to the database
 // All prepared statement associated with the 
 // connection should be finalized before closing.
-void Credential::closeDatabase(){
+void DatabaseManager::closeDatabase(){
     sqlite3_close(DB);
 }
 
@@ -66,7 +66,7 @@ Run the SQL by calling sqlite3_step() one or more times.
 Reset the prepared statement using sqlite3_reset() then go back to step 2. Do this zero or more times.
 Destroy the object using sqlite3_finalize().
 */
-void Credential::insertCredential(string service, string username, string password){
+void DatabaseManager::insertCredential(string service, string username, string password){
     sqlite3_stmt* stmt;
     // TESTING
     cout << "Inserting credentials: " << service << " " << username << " " << password << endl;
@@ -93,7 +93,7 @@ void Credential::insertCredential(string service, string username, string passwo
 
     // Destruct - Finalize the statement to release resources
     sqlite3_finalize(stmt);
-  
+
 	// int exit = sqlite3_exec(DB, sql.c_str(), NULL, 0, &errMessage);
     
     // if(exit != 0){
@@ -104,7 +104,7 @@ void Credential::insertCredential(string service, string username, string passwo
 	// }
 }
 
-void Credential::deleteCredential(string service, string user){
+void DatabaseManager::deleteCredential(string service, string user){
     sqlite3_stmt* stmt;
     string query = "DELETE FROM CREDENTIALS WHERE service = ? AND user = ?" ;
 
@@ -152,7 +152,7 @@ void Credential::deleteCredential(string service, string user){
 /*
     Displays all credentials to the console
 */
-void Credential::displayDatabase(){
+void DatabaseManager::displayDatabase(){
     string query = "SELECT * FROM CREDENTIALS;";
     cout << "\n\n********************************************************************" << endl;
     cout << "|                           Cypher Vault                           |" << endl;
@@ -161,28 +161,28 @@ void Credential::displayDatabase(){
     sqlite3_exec(DB, query.c_str(), callback, NULL, NULL);
 }
 
-Credential::Credential(){
-   createTable();
+DatabaseManager::DatabaseManager(){
+    createTable();
 }
 
 // Destructor definition
-Credential::~Credential() {}
+DatabaseManager::~DatabaseManager() {}
 
 /*
     Calls binding(choice, service, newUsername) to change the username
 */
-void Credential::setUsername(string service, string user, const string& newUsername) {
+void DatabaseManager::setUsername(string service, string user, const string& newUsername) {
     binding(1, service, user, newUsername);
 }
 
 /*s
     Calls binding(choice, service, newPassword) to change the password
 */
-void Credential::setPassword(string service, string user, const string& newPassword) {
+void DatabaseManager::setPassword(string service, string user, const string& newPassword) {
     binding(2, service, user, newPassword);
 }
 
-void Credential::binding(int choice, string service, string user, const string& updateCell){
+void DatabaseManager::binding(int choice, string service, string user, const string& updateCell){
     cout << " CHECKING ARGS\n\n";
     cout << choice << " " << service << " " << user << " " << updateCell;
     sqlite3_stmt* stmt;
@@ -226,12 +226,12 @@ void Credential::binding(int choice, string service, string user, const string& 
     }else {
         cout << "Record updated successfully!" << endl;
     }
-   
+
     // Finalize the statement
     sqlite3_finalize(stmt);
 }
 
-bool Credential::findCredential(string& str, string &userSelected) {
+bool DatabaseManager::findCredential(string& str, string &userSelected) {
     sqlite3_stmt* stmt;
     string query = "SELECT * FROM CREDENTIALS WHERE SERVICE LIKE ?";  // Use a placeholder
 
@@ -276,9 +276,9 @@ bool Credential::findCredential(string& str, string &userSelected) {
 
         // Process or print the found record as needed
         cout << "Service: " << service 
-                  << ", User: " << user 
-                  << ", Password: " << password 
-                  << endl;
+            << ", User: " << user 
+            << ", Password: " << password 
+            << endl;
     }
 
     // If multiple records are found, user will be prompted to enter a valid ID

@@ -32,10 +32,20 @@ features to add:
     alphabetize by services
     adding two-factor authentication
 
-5/20/24:
-    Using SQLite, specifically sqlite3 API 
-        - serverless database (does not require a separate server -> simple deploy and manage)
-        - lightweight (disk space and memory usage)
-    Embedded database for local/client storage  
-    Follows ACID properties (atomicity, consistency, isolation, & durability)
-    Almost all OS supports it
+
+Using SQLite, specifically sqlite3 API 
+    - serverless database (does not require a separate server -> simple deploy and manage)
+    - lightweight (disk space and memory usage)
+Embedded database for local/client storage  
+Follows ACID properties (atomicity, consistency, isolation, & durability)
+Almost all OS supports it
+
+--------------------------------------------------------------
+Regarding OpenSSL: (from stackoverflow)
+    - Don't use AES_encrypt & AES_decrypt. Low level, harder to use, does not use hardware acceleration,
+    like AES-NI. Subject to endianess, "byte order" how bytes are ordered in data, issues on obscure platforms.
+    - Use EVP_*. Uses hardware acceleration and does not suffer from endianess issues 
+    -you can use a mode like CBC, but the ciphertext will lack integrity and authenticity 
+    assurances. So you usually want a mode like EAX, CCM, or GCM. (Or you manually 
+    have to apply a HMAC after the encryption under a separate key.)
+    

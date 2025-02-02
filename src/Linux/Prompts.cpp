@@ -4,8 +4,6 @@
 #include <unistd.h>
 
 //**********************************************************************
-
-
 void Prompts::newAccount (string &service, string &username, string &password){
   cout  << endl << endl << "----------------------------------------" << endl;
   cout << "|            Account Setup             |" << endl;

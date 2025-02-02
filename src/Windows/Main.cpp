@@ -2,7 +2,7 @@
 #include <iostream> 
 #include <iomanip>
 
-#include "credential.h"
+#include "databaseManager.h"
 #include "prompts.h"
 
 #include <sqlite3.h>
@@ -16,7 +16,6 @@ int main(int argc, char const *argv[]) {
 		main.cpp:13:11: warning: unknown escape sequence: '\040'
 	13 |   cout << "  ___|                |                \ \     /              |  |  " << endl;
 	*/
-
 	cout << R"(  ___|                |                \ \     /              |  |  )" << endl;
 	cout << R"( |      |   |  __ \   __ \    _ \   __| \ \   /  _` |  |   |  |  __|)" << endl;
 	cout << R"( |      |   |  |   |  | | |   __/  |     \ \ /  (   |  |   |  |  |  )" << endl;
@@ -38,6 +37,7 @@ int main(int argc, char const *argv[]) {
 	// database.createTable();
 	// database.insertCredential("Netflix", "User1", "password1");
 	// database.displayDatabase();
+
 	bool quit = false;
 	while(!quit){
 		prompt.printMenu();

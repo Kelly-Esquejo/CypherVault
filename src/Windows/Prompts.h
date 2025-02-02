@@ -4,15 +4,13 @@
 #include <iostream>
 #include <string>
 
-#include "credential.h"
+#include "databaseManager.h"
 using namespace std;
 
 class Prompts {
     
     private:
-        /* Prompts user */
-        
-        Credential newCredential;
+        DatabaseManager newCredential;
 
     public:
     //**********************************************************************
@@ -28,12 +26,7 @@ class Prompts {
         string getPassword();
         bool checkPasswordValidity(string &);
         void showPassword(string &);
-    //**********************************************************************
-
-  
-    //**********************************************************************
-
-    
+   
 
 };
 
